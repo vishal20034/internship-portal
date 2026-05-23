@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const multer = require("multer");
+const XLSX = require("xlsx");
 const cors = require("cors");
 require("nodemailer");
 
@@ -7,6 +9,7 @@ const Student = require("./models/Student");
 const nodemailer = require("nodemailer");
 
 const app = express();
+const upload = multer({ dest: "uploads/" });
 const transporter = nodemailer.createTransport({
 
     service: "gmail",
@@ -15,7 +18,20 @@ const transporter = nodemailer.createTransport({
 
         user: "ten.internshipportal@gmail.com",
 
-        pass: "ofqa vtgp bghv hfze"
+        pass: "cnsl ulyw lgrg waqj"
+
+    }
+
+});
+transporter.verify(function(error, success) {
+
+    if (error) {
+
+        console.log(error);
+
+    } else {
+
+        console.log("Email Server Ready");
 
     }
 
@@ -82,34 +98,21 @@ app.post("/register", async (req, res) => {
         });
 
         await newStudent.save();
-        await transporter.sendMail({
+console.log("Student Saved");
 
-    from:
-    '"The Entrepreneurship Network" <ten.internshipportal@gmail.com>',
+await transporter.sendMail({
+
+    from: "ten.internshipportal@gmail.com",
 
     to: email,
 
-    subject:
-    "Internship Registration Successful",
+    subject: "Test Mail",
 
-    text:
-
-`Hello ${firstName},
-
-Your internship registration is successful.
-
-Employee ID: ${employeeId}
-
-Domain: ${domain}
-
-Tenure: ${tenure} Months
-
-Joining Date: ${joiningDate}
-
-Thank You,
-The Entrepreneurship Network`
+    text: "Mail Working"
 
 });
+
+console.log("Mail Sent");
 
         // Send Response
         res.json({
@@ -129,6 +132,112 @@ The Entrepreneurship Network`
             success: false,
 
             message: "Server Error"
+
+        });
+
+    }
+
+});
+app.post("/upload-excel", upload.single("excelFile"), async (req, res) => {
+
+    try {
+
+        const workbook = XLSX.readFile(req.file.path);
+
+        const sheetName = workbook.SheetNames[0];
+
+        const sheetData = XLSX.utils.sheet_to_json(
+            workbook.Sheets[sheetName]
+        );
+
+        let generatedData = [];
+
+        for (let i = 0; i < sheetData.length; i++) {
+
+            const student = sheetData[i];
+
+            const domain =
+                student.domain.toUpperCase();
+
+            const employeeId =
+                `TEN/${domain}/${1000 + i}`;
+
+            const newStudent = new Student({
+
+                firstName: student.firstName,
+
+                lastName: student.lastName,
+
+                domain: student.domain,
+
+                whatsapp: student.whatsapp,
+
+                email: student.email,
+
+                tenure: student.tenure,
+
+                joiningDate: student.joiningDate,
+
+                employeeId: employeeId
+
+            });
+
+            await newStudent.save();
+            await transporter.sendMail({
+
+    from: '"The Entrepreneurship Network" <ten.internshipportal@gmail.com>',
+
+    to: student.email,
+
+    subject: "Internship Registration Successful",
+
+    text: `Hello ${student.firstName},
+
+Your internship registration is successful.
+
+Employee ID: ${employeeId}
+
+Domain: ${student.domain}
+
+Tenure: ${student.tenure} Months
+
+Joining Date: ${student.joiningDate}
+
+Thank You,
+The Entrepreneurship Network`
+
+});
+
+            generatedData.push({
+
+                name:
+                    student.firstName + " " + student.lastName,
+
+                employeeId: employeeId
+
+            });
+
+        }
+
+        res.json({
+
+            success: true,
+
+            data: generatedData
+
+        });
+
+    }
+
+    catch (err) {
+
+        console.log(err);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Excel Upload Failed"
 
         });
 

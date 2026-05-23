@@ -1,106 +1,59 @@
-document
-.getElementById("studentForm")
-.addEventListener("submit", async function(e) {
+document.getElementById("uploadExcelBtn").addEventListener("click", async () => {
 
-e.preventDefault();
+    const fileInput = document.getElementById("excelFile");
 
-const form =
-document.getElementById("studentForm");
+    const file = fileInput.files[0];
 
-const submitBtn =
-document.getElementById("submitBtn");
+    if (!file) {
 
-const email =
-document.getElementById("email").value;
+        alert("Please choose Excel file");
 
-// Gmail validation
-const gmailPattern =
-/^[a-z0-9._%+-]+@gmail\.com$/;
+        return;
 
-if (!gmailPattern.test(email)) {
+    }
 
-alert("Enter valid Gmail ID");
+    const formData = new FormData();
 
-return;
+    formData.append("excelFile", file);
 
-}
+    try {
 
-// Disable button
-submitBtn.disabled = true;
+        const response = await fetch("/upload-excel", {
 
-submitBtn.innerText = "Submitting...";
+            method: "POST",
 
-const data = {
+            body: formData
 
-firstName:
-document.getElementById("firstName").value,
+        });
 
-lastName:
-document.getElementById("lastName").value,
+        const data = await response.json();
 
-domain:
-document.getElementById("domain").value,
+        console.log(data);
 
-whatsapp:
-document.getElementById("whatsapp").value,
+        if (data.success) {
 
-email:
-document.getElementById("email").value,
+            let message = "Employee IDs Generated:\n\n";
 
-tenure:
-document.getElementById("tenure").value,
+            data.data.forEach((item) => {
 
-joiningDate:
-document.getElementById("joiningDate").value
+                message += `${item.name} : ${item.employeeId}\n`;
 
-};
+            });
 
-try {
+            alert(message);
 
-const response =
-await fetch("/register", {
+        } else {
 
-method: "POST",
+            alert(data.message);
 
-headers: {
+        }
 
-"Content-Type":
-"application/json"
+    } catch (err) {
 
-},
+        console.log(err);
 
-body: JSON.stringify(data)
+        alert("Upload Failed");
 
-});
-
-const result =
-await response.json();
-
-document.getElementById("result")
-.innerHTML =
-
-"Generated Employee ID: "
-+ result.employeeId;
-
-// CLEAR FORM
-form.reset();
-
-// Button reset
-submitBtn.disabled = false;
-
-submitBtn.innerText = "Submit";
-
-}
-catch(error) {
-
-console.log(error);
-
-alert("Something went wrong");
-
-submitBtn.disabled = false;
-
-submitBtn.innerText = "Submit";
-
-}
+    }
 
 });
