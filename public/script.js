@@ -13,16 +13,30 @@ document.getElementById("studentForm")
         joiningDate: document.getElementById("joiningDate").value
     };
 
-    const response = await fetch("/register", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
+    try {
 
-    const result = await response.json();
+        const response = await fetch("/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
 
-    document.getElementById("result").innerHTML =
-        "Generated Employee ID: " + result.employeeId;
+        const result = await response.json();
+
+        console.log(result);
+
+        document.getElementById("result").innerHTML =
+            "Generated Employee ID: " + result.employeeId;
+
+    } catch (error) {
+
+        console.log(error);
+
+        document.getElementById("result").innerHTML =
+            "Error generating Employee ID";
+
+    }
+
 });
