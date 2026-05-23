@@ -16,20 +16,31 @@ mongoose.connect("mongodb://nagbishal07_db_user:_DXMzR6bkF!7Bc9@ac-kbv0ma9-shard
 
 .catch((err) => console.log(err));
 
-function generateEmployeeId(domain) {
 
-    const uniqueCode = Math.floor(1000 + Math.random() * 9000);
+// Generate Employee ID
+async function generateEmployeeId(domain) {
 
-    return `TEN/${domain.toUpperCase()}/${uniqueCode}`;
+    // Count total students
+    const totalStudents =
+    await Student.countDocuments();
+
+    // Sequence number
+    const sequenceNumber =
+    1001 + totalStudents;
+
+    // Employee ID format
+    return `TEN/${domain.toUpperCase()}/${sequenceNumber}`;
 }
 
+
+// Register API
 app.post("/register", async (req, res) => {
 
     try {
 
         const {
-            FirstName,
-            LastName,
+            firstName,
+            lastName,
             domain,
             whatsapp,
             email,
@@ -37,24 +48,33 @@ app.post("/register", async (req, res) => {
             joiningDate
         } = req.body;
 
-        const employeeId = generateEmployeeId(domain);
+        // Generate Employee ID
+        const employeeId =
+        await generateEmployeeId(domain);
 
+        // Save Student
         const newStudent = new Student({
-            firstName: FirstName,
-            lastName: LastName,
+
+            firstName,
+            lastName,
             domain,
             whatsapp,
             email,
             tenure,
             joiningDate,
             employeeId
+
         });
 
         await newStudent.save();
 
+        // Send Response
         res.json({
+
             success: true,
+
             employeeId: employeeId
+
         });
 
     } catch (err) {
@@ -62,14 +82,24 @@ app.post("/register", async (req, res) => {
         console.log(err);
 
         res.status(500).json({
+
             success: false,
+
             message: "Server Error"
+
         });
 
     }
 
 });
 
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
+
+// Start Server
+const PORT =
+process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+
+    console.log(`Server running on port ${PORT}`);
+
 });

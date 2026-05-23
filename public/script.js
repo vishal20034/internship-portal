@@ -35,7 +35,7 @@ document.getElementById("studentForm")
         console.log(error);
 
         document.getElementById("result").innerHTML =
-            "Error generating Employee ID";
+            "Error while generating Employee ID";
 
     }
 
