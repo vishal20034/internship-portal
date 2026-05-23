@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Internship Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Internship Registration</h1>
+
+        <form id="studentForm">
+
+            <!-- First Name -->
+            <input 
+                type="text" 
+                id="firstName" 
+                placeholder="First Name"
+                required
+            >
+
+            <!-- Last Name -->
+            <input 
+                type="text" 
+                id="lastName" 
+                placeholder="Last Name"
+                required
+            >
+
+            <!-- Domain -->
+            <input 
+                type="text" 
+                id="domain" 
+                placeholder="Domain"
+                required
+            >
+
+            <!-- Phone -->
+            <input 
+                type="tel" 
+                id="whatsapp" 
+                placeholder="10 Digit Phone Number"
+                pattern="[0-9]{10}"
+                maxlength="10"
+                required
+            >
+
+            <!-- Email -->
+            <input 
+                type="email" 
+                id="email" 
+                placeholder="Email"
+                required
+            >
+
+            <!-- Tenure -->
+            <input 
+                type="number" 
+                id="tenure" 
+                placeholder="Tenure in Months"
+                min="1"
+                required
+            >
+
+            <!-- Joining Date -->
+            <input 
+                type="date" 
+                id="joiningDate"
+                required
+            >
+
+            <button type="submit">Submit</button>
+
+        </form>
+
+        <h2 id="result"></h2>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
