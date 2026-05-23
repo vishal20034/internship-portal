@@ -1,42 +1,106 @@
-document.getElementById("studentForm")
+document
+.getElementById("studentForm")
 .addEventListener("submit", async function(e) {
 
-    e.preventDefault();
+e.preventDefault();
 
-    const data = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        domain: document.getElementById("domain").value,
-        whatsapp: document.getElementById("whatsapp").value,
-        email: document.getElementById("email").value,
-        tenure: document.getElementById("tenure").value,
-        joiningDate: document.getElementById("joiningDate").value
-    };
+const form =
+document.getElementById("studentForm");
 
-    try {
+const submitBtn =
+document.getElementById("submitBtn");
 
-        const response = await fetch("/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+const email =
+document.getElementById("email").value;
 
-        const result = await response.json();
+// Gmail validation
+const gmailPattern =
+/^[a-z0-9._%+-]+@gmail\.com$/;
 
-        console.log(result);
+if (!gmailPattern.test(email)) {
 
-        document.getElementById("result").innerHTML =
-            "Generated Employee ID: " + result.employeeId;
+alert("Enter valid Gmail ID");
 
-    } catch (error) {
+return;
 
-        console.log(error);
+}
 
-        document.getElementById("result").innerHTML =
-            "Error while generating Employee ID";
+// Disable button
+submitBtn.disabled = true;
 
-    }
+submitBtn.innerText = "Submitting...";
+
+const data = {
+
+firstName:
+document.getElementById("firstName").value,
+
+lastName:
+document.getElementById("lastName").value,
+
+domain:
+document.getElementById("domain").value,
+
+whatsapp:
+document.getElementById("whatsapp").value,
+
+email:
+document.getElementById("email").value,
+
+tenure:
+document.getElementById("tenure").value,
+
+joiningDate:
+document.getElementById("joiningDate").value
+
+};
+
+try {
+
+const response =
+await fetch("/register", {
+
+method: "POST",
+
+headers: {
+
+"Content-Type":
+"application/json"
+
+},
+
+body: JSON.stringify(data)
+
+});
+
+const result =
+await response.json();
+
+document.getElementById("result")
+.innerHTML =
+
+"Generated Employee ID: "
++ result.employeeId;
+
+// CLEAR FORM
+form.reset();
+
+// Button reset
+submitBtn.disabled = false;
+
+submitBtn.innerText = "Submit";
+
+}
+catch(error) {
+
+console.log(error);
+
+alert("Something went wrong");
+
+submitBtn.disabled = false;
+
+submitBtn.innerText = "Submit";
+
+}
 
 });

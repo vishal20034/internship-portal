@@ -1,10 +1,25 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("nodemailer");
 
 const Student = require("./models/Student");
+const nodemailer = require("nodemailer");
 
 const app = express();
+const transporter = nodemailer.createTransport({
+
+    service: "gmail",
+
+    auth: {
+
+        user: "ten.internshipportal@gmail.com",
+
+        pass: "ofqa vtgp bghv hfze"
+
+    }
+
+});
 
 app.use(cors());
 app.use(express.json());
@@ -67,6 +82,34 @@ app.post("/register", async (req, res) => {
         });
 
         await newStudent.save();
+        await transporter.sendMail({
+
+    from:
+    '"The Entrepreneurship Network" <ten.internshipportal@gmail.com>',
+
+    to: email,
+
+    subject:
+    "Internship Registration Successful",
+
+    text:
+
+`Hello ${firstName},
+
+Your internship registration is successful.
+
+Employee ID: ${employeeId}
+
+Domain: ${domain}
+
+Tenure: ${tenure} Months
+
+Joining Date: ${joiningDate}
+
+Thank You,
+The Entrepreneurship Network`
+
+});
 
         // Send Response
         res.json({
