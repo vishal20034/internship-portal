@@ -1,27 +1,30 @@
+const path = require("path");
+const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const XLSX = require("xlsx");
-const cors = require("cors");
 require("nodemailer");
 
 const Student = require("./models/Student");
 const nodemailer = require("nodemailer");
 
 const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use(express.static("public"));
+
 const upload = multer({ dest: "uploads/" });
 const transporter = nodemailer.createTransport({
-
-    service: "gmail",
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
 
     auth: {
-
-        user: "ten.internshipportal@gmail.com",
-
-        pass: "cnsl ulyw lgrg waqj"
-
+        user: "ac5ad1001@smtp-brevo.com",
+        pass: "ESQakY0j5JbNIUGt"
     }
-
 });
 transporter.verify(function(error, success) {
 
@@ -37,9 +40,7 @@ transporter.verify(function(error, success) {
 
 });
 
-app.use(cors());
-app.use(express.json());
-app.use(express.static("public"));
+
 
 mongoose.connect("mongodb://nagbishal07_db_user:_DXMzR6bkF!7Bc9@ac-kbv0ma9-shard-00-00.dtg7de6.mongodb.net:27017,ac-kbv0ma9-shard-00-01.dtg7de6.mongodb.net:27017,ac-kbv0ma9-shard-00-02.dtg7de6.mongodb.net:27017/?ssl=true&replicaSet=atlas-ekamxn-shard-0&authSource=admin&appName=Cluster0")
 
@@ -245,6 +246,29 @@ The Entrepreneurship Network`
 
 });
 
+app.get("/dashboard", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "dashboard.html"));
+});
+
+app.get("/students", async (req, res) => {
+
+    try {
+
+        const students = await Student.find().sort({ createdAt: -1 });
+
+        res.json(students);
+
+    } 
+    
+    catch (error) {
+
+        res.status(500).json({
+            message: "Error fetching students"
+        });
+
+    }
+
+});
 
 // Start Server
 const PORT =
