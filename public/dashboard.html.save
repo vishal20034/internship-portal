@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            background:#f5f5f5;
+            padding:20px;
+        }
+
+        h1{
+            text-align:center;
+            color:#333;
+        }
+
+        .search-box{
+            margin-bottom:20px;
+            text-align:center;
+        }
+
+        input{
+            width:300px;
+            padding:10px;
+            border-radius:8px;
+            border:1px solid gray;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+        }
+
+        th{
+            background:#007bff;
+            color:white;
+            padding:12px;
+        }
+
+        td{
+            padding:10px;
+            border-bottom:1px solid #ddd;
+            text-align:center;
+        }
+
+        tr:hover{
+            background:#f1f1f1;
+        }
+
+    </style>
+</head>
+
+<body>
+ 
+<script>
+
+const loginTime = sessionStorage.getItem("dashboardLogin");
+
+if(loginTime){
+    const currentTime = new Date().getTime();
+
+    if(currentTime - loginTime < 10 * 60 * 1000){
+        // already logged in within 10 minutes
+    } else {
+        sessionStorage.removeItem("dashboardLogin");
+        askPassword();
+    }
+} else {
+    askPassword();
+}
+
+function askPassword(){
+    const password = prompt("Enter Dashboard Password");
+
+    if(password === "Intern2026#"){
+        sessionStorage.setItem("dashboardLogin", new Date().getTime());
+    } else {
+        alert("Wrong Password");
+        window.location.href = "index.html";
+    }
+}
+
+</script>
+
+ <h1>Internship Dashboard</h1>
+       
+    <div class="search-box">
+         <input type="text" 
+    id="searchInput" placeholder="Search Student">
+    </div>
+         
+           <table>
+
+           <thead>
+            <tr>
+                <th>Name</th>
+                <th>Employee ID</th>
+                <th>Domain</th>
+                <th>Email</th>
+                <th>Whatsapp</th>
+                <th>Joining Date</th>
+                <th>Tenure</th>
+                <th>Created Time</th>
+                <th>Action</th><<<
+            </tr>
+
+        </thead>
+
+        <tbody id="tableBody">
+
+        </tbody>
+
+    </table>
+
+<script>
+
+async function loadStudents(){
+
+    const response = await fetch("/students");
+
+    const students = await response.json();
+
+    const tableBody = document.getElementById("tableBody");
+
+    tableBody.innerHTML = "";
+
+    students.forEach(student => {
+
+        const row = `
+        <tr>
+
+            <td>${student.firstName} ${student.lastName}</td>
+
+            <td>${student.employeeId}</td>
+
+            <td>${student.domain}</td>
+
+            <td>${student.email}</td>
+
+            <td>${student.whatsapp}</td>
+
+            <td>${student.joiningDate}</td>
+
+            <td>${student.tenure}</td>
+
+            <td>${new Date(student.createdAt).toLocaleString()}</td>
+
+        </tr>
+        `;
+
+        tableBody.innerHTML += row;
+
+    });
+
+}
+
+document.getElementById("searchInput")
+.addEventListener("keyup", function(){
+
+    let value = this.value.toLowerCase();
+
+    let rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+
+        row.style.display =
+        row.innerText.toLowerCase().includes(value)
+        ? ""
+        : "none";
+
+    });
+
+});
+
+loadStudents();
+
+</script>
+
+</body>
+</html>

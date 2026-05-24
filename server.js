@@ -310,6 +310,43 @@ app.get("/students", async (req, res) => {
 
 });
 
+app.put("/students/:id", async (req, res) => {
+    try {
+        await Student.findByIdAndUpdate(
+            req.params.id,
+            {
+                firstName: req.body.firstName
+            }
+        );
+
+        res.json({
+            message: "Student updated"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Error updating student"
+        });
+    }
+});
+
+app.delete("/students/:id", async (req, res) => {
+    try {
+
+        await Student.findByIdAndDelete(req.params.id);
+
+        res.json({
+            message: "Student deleted"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Error deleting student"
+        });
+    }
+});
+
+
 // Start Server
 const PORT =
 process.env.PORT || 5000;
