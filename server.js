@@ -67,7 +67,30 @@ async function generateEmployeeId(domain) {
 
 // Register API
 app.post("/register", async (req, res) => {
+    const {
+    firstName,
+    lastName,
+    domain,
+    whatsapp,
+    email,
+    tenure,
+    joiningDate
+} = req.body;
 
+    const emailRegex =
+/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if(!emailRegex.test(email)){
+
+    return res.json({
+
+        success:false,
+
+        message:"Invalid Email"
+
+    });
+
+}
     try {
 
         const {
@@ -103,13 +126,30 @@ console.log("Student Saved");
 
 await transporter.sendMail({
 
-    from: "ten.internshipportal@gmail.com",
+    from: '"TEN Internship Portal" <ten.internshipportal@gmail.com>',
 
     to: email,
 
-    subject: "Test Mail",
+    subject: "Internship Registration Successful",
 
-    text: "Mail Working"
+    text: `
+
+Hello ${firstName},
+
+Your internship registration is successful.
+
+Employee ID: ${employeeId}
+
+Domain: ${domain}
+
+Tenure: ${tenure} Months
+
+Joining Date: ${joiningDate}
+
+Thank You,
+The Entrepreneurship Network
+
+`
 
 });
 
