@@ -15,6 +15,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+app.get("/dashboard", (req, res) => {
+    res.sendFile(__dirname + "/public/dashboard.html");
+});
+
+app.get("/edit.html", (req, res) => {
+    res.sendFile(__dirname + "/public/edit.html");
+});
+
 const upload = multer({ dest: "uploads/" });
 const transporter = nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
