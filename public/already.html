@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Already Registered</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+overflow:hidden;
+}
+
+.container{
+width:90%;
+max-width:450px;
+padding:40px;
+border-radius:25px;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(20px);
+box-shadow:0 0 40px rgba(0,0,0,0.3);
+text-align:center;
+color:white;
+animation:fadeIn 1s ease;
+}
+
+.icon{
+font-size:70px;
+margin-bottom:20px;
+animation:pulse 1.5s infinite;
+}
+
+h1{
+font-size:30px;
+margin-bottom:15px;
+}
+
+p{
+font-size:16px;
+margin-bottom:10px;
+opacity:0.9;
+}
+
+.employee{
+margin-top:25px;
+padding:15px;
+border-radius:15px;
+background:rgba(255,255,255,0.15);
+font-size:20px;
+font-weight:bold;
+letter-spacing:1px;
+}
+
+.btn{
+display:inline-block;
+margin-top:30px;
+padding:14px 30px;
+border-radius:50px;
+background:white;
+color:#2563eb;
+font-weight:bold;
+text-decoration:none;
+transition:0.3s;
+}
+
+.btn:hover{
+transform:scale(1.05);
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@keyframes pulse{
+0%{
+transform:scale(1);
+}
+50%{
+transform:scale(1.1);
+}
+100%{
+transform:scale(1);
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="icon">⚠️</div>
+
+<h1>Already Registered</h1>
+
+<p>You are already registered in</p>
+
+<p><b>TEN Internship Portal</b></p>
+
+<div class="employee" id="employeeId">
+Employee ID
+</div>
+
+<a href="/" class="btn">
+Back To Home
+</a>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+
+document.getElementById("employeeId").innerText =
+params.get("id");
+
+</script>
+
+</body>
+</html>

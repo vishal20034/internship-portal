@@ -184,8 +184,33 @@ function askPassword(){
 <h1>Internship Dashboard</h1>
 </div>
 
+<div id="totalStudentsBox"
+style="
+background:#ffffff;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+font-size:22px;
+font-weight:bold;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+">
+Total Registered Students: 0
+</div>
+
 <div class="search-box">
-<input type="text" id="searchInput" placeholder="Search Student">
+
+<input type="text"
+id="searchInput"
+placeholder="Search Student">
+
+<br><br>
+
+<button class="delete-btn"
+onclick="deleteSelectedStudents()"
+style="max-width:250px;">
+Delete Selected
+</button>
+
 </div>
 
 <div class="cards-container" id="cardsContainer">
@@ -198,9 +223,16 @@ function askPassword(){
 
 async function loadStudents(){
 
-    const response = await fetch("/students");
+    const response = await fetch("/students", {
+    headers:{
+        Authorization:"Bearer mysecret123"
+    }
+});
 
     const students = await response.json();
+
+    document.getElementById("totalStudentsBox").innerText =
+`Total Registered Students: ${students.length}`;
 
     const cardsContainer = document.getElementById("cardsContainer");
 
@@ -208,69 +240,76 @@ async function loadStudents(){
 
     students.forEach(student => {
 
-        const card = `
-        
-        <div class="student-card">
+const card = `
 
-        <div class="student-name">
-        ${student.firstName} ${student.lastName}
-        </div>
+<div class="student-card">
 
-        <div class="info">
-        <span class="label">Employee ID:</span>
-        ${student.employeeId}
-        </div>
+<input type="checkbox"
+class="student-checkbox"
+value="${student._id}"
+style="margin-bottom:15px; width:20px; height:20px;">
 
-        <div class="info">
-        <span class="label">Domain:</span><br>
-        <span class="badge">${student.domain}</span>
-        </div>
+<div class="student-name">
+${student.firstName} ${student.lastName}
+</div>
 
-        <div class="info">
-        <span class="label">Email:</span>
-        ${student.email}
-        </div>
+<div class="info">
+<span class="label">Employee ID:</span>
+${student.employeeId}
+</div>
 
-        <div class="info">
-        <span class="label">Whatsapp:</span>
-        ${student.whatsapp}
-        </div>
+<div class="info">
+<span class="label">Domain:</span><br>
+<span class="badge">${student.domain}</span>
+</div>
 
-        <div class="info">
-        <span class="label">Joining Date:</span>
-        ${student.joiningDate}
-        </div>
+<div class="info">
+<span class="label">Email:</span>
+${student.email}
+</div>
 
-        <div class="info">
-        <span class="label">Tenure:</span>
-        ${student.tenure}
-        </div>
+<div class="info">
+<span class="label">Whatsapp:</span>
+${student.whatsapp}
+</div>
 
-        <div class="info">
-        <span class="label">Updated Time:</span><br>
-        ${new Date(student.updatedAt || student.createdAt).toLocaleString()}
-        </div>
+<div class="info">
+<span class="label">Joining Date:</span>
+${student.joiningDate}
+</div>
 
-        <div class="button-group">
+<div class="info">
+<span class="label">Tenure:</span>
+${student.tenure}
+</div>
 
-        <button class="edit-btn"
-        onclick="editStudent('${student._id}')">
-        Edit
-        </button>
+<div class="info">
+<span class="label">Updated Time:</span><br>
+${new Date(student.updatedAt || student.createdAt).toLocaleString()}
+</div>
 
-        <button class="delete-btn"
-        onclick="deleteStudent('${student._id}')">
-        Delete
-        </button>
+<div class="button-group">
 
-        </div>
+<button class="edit-btn"
+onclick="editStudent('${student._id}')">
+Edit
+</button>
 
-        </div>
-        `;
+<button class="delete-btn"
+onclick="deleteStudent('${student._id}')">
+Delete
+</button>
 
-        cardsContainer.innerHTML += card;
+</div>
 
-    });
+</div>
+
+`;
+
+cardsContainer.innerHTML += card;
+
+});
+   
 
 }
 
@@ -298,6 +337,40 @@ function editStudent(id){
 
 }
 
+async function deleteSelectedStudents(){
+
+    const selected =
+    document.querySelectorAll(".student-checkbox:checked");
+
+    if(selected.length === 0){
+
+        alert("Select students first");
+        return;
+    }
+
+    const confirmDelete =
+    confirm("Delete selected students?");
+
+    if(!confirmDelete) return;
+
+    for(const checkbox of selected){
+
+        await fetch(`/students/${checkbox.value}`,{
+            method:"DELETE"
+        });
+
+    }
+
+    alert("Selected Students Deleted");
+
+    selected.forEach(checkbox => {
+
+    checkbox.closest(".student-card").remove();
+
+});
+
+}
+
 async function deleteStudent(id){
 
     const confirmDelete = confirm("Delete this student?");
@@ -308,14 +381,14 @@ async function deleteStudent(id){
         method:"DELETE"
     });
 
-    alert("Student Deleted");
-
-    loadStudents();
+    document
+.querySelector(`button[onclick="deleteStudent('${id}')"]`)
+.closest(".student-card")
+.remove();
 }
 
 loadStudents();
 
 </script>
-
 </body>
 </html>

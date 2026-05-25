@@ -99,6 +99,27 @@ if(!emailRegex.test(email)){
     });
 
 }
+
+   const existingStudent = await Student.findOne({
+    $or: [
+        { email: email },
+        { whatsapp: whatsapp }
+    ]
+});
+
+if (existingStudent) {
+
+    return res.json({
+
+        success:false,
+
+        already:true,
+
+        employeeId: existingStudent.employeeId
+
+    });
+
+}
     try {
 
         const {
@@ -299,6 +320,14 @@ app.get("/dashboard", (req, res) => {
 });
 
 app.get("/students", async (req, res) => {
+
+    const adminPassword = req.headers.authorization;
+
+    if(adminPassword !== "Bearer mysecret123"){
+        return res.status(401).json({
+            message:"Unauthorized"
+        });
+    }
 
     try {
 

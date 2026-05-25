@@ -449,6 +449,15 @@ document.getElementById("studentForm")
 
     const result = await response.json();
 
+    if(result.already){
+
+window.location.href =
+`already.html?id=${result.employeeId}`;
+
+return;
+
+} 
+
     document.getElementById("studentForm").reset();
 
 setTimeout(() => {
