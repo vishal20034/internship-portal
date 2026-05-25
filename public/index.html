@@ -1,94 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internship Registration</title>
-    <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Internship Registration</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:auto;
+
+    padding:20px;
+
+    background:
+    linear-gradient(-45deg,
+    #0f172a,
+    #1e3a8a,
+    #7c3aed,
+    #06b6d4);
+
+    background-size:400% 400%;
+
+    animation:gradientBG 12s ease infinite;
+}
+
+@keyframes gradientBG{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+}
+
+.container{
+
+    width:100%;
+
+    max-width:560px;
+
+    padding:40px;
+
+    border-radius:30px;
+
+    background:rgba(255,255,255,0.12);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,0.2);
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,0.35);
+
+    animation:floatCard 4s ease-in-out infinite;
+}
+
+@keyframes floatCard{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-8px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+.logo{
+
+    width:90px;
+
+    height:90px;
+
+    margin:auto;
+
+    margin-bottom:20px;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:36px;
+
+    font-weight:bold;
+
+    box-shadow:0 8px 25px rgba(59,130,246,0.5);
+}
+
+h1{
+
+    text-align:center;
+
+    color:white;
+
+    font-size:40px;
+
+    margin-bottom:10px;
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#e2e8f0;
+
+    margin-bottom:35px;
+
+    font-size:15px;
+}
+
+.input-box{
+
+    margin-bottom:18px;
+}
+
+.input-box label{
+
+    display:block;
+
+    color:white;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+    font-weight:500;
+}
+
+.input-box input,
+.input-box select{
+
+    width:100%;
+
+    padding:17px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,0.15);
+
+    color:white;
+
+    font-size:15px;
+
+    transition:0.3s;
+}
+
+.input-box input::placeholder{
+    color:#dbeafe;
+}
+
+.input-box input:focus,
+.input-box select:focus{
+
+    transform:scale(1.02);
+
+    background:rgba(255,255,255,0.22);
+
+    box-shadow:0 0 15px rgba(255,255,255,0.25);
+}
+
+select option{
+    color:black;
+}
+
+button{
+
+    width:100%;
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:linear-gradient(
+    135deg,
+    #3b82f6,
+    #8b5cf6
+    );
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    margin-top:10px;
+
+    box-shadow:0 8px 20px rgba(59,130,246,0.4);
+}
+
+button:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 12px 28px rgba(59,130,246,0.6);
+}
+
+.footer{
+
+    text-align:center;
+
+    margin-top:25px;
+
+    color:#dbeafe;
+
+    font-size:13px;
+}
+
+.glow{
+
+    position:absolute;
+
+    width:250px;
+
+    height:250px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,0.08);
+
+    filter:blur(40px);
+
+    z-index:-1;
+}
+
+.glow1{
+    top:50px;
+    left:50px;
+}
+
+.glow2{
+    bottom:50px;
+    right:50px;
+}
+
+@media(max-width:768px){
+
+    body{
+        padding:15px;
+        align-items:flex-start;
+    }
+
+    .container{
+
+        margin-top:20px;
+
+        padding:25px;
+    }
+
+    h1{
+        font-size:30px;
+    }
+
+    .logo{
+
+        width:70px;
+        height:70px;
+        font-size:28px;
+    }
+
+    button{
+        padding:16px;
+    }
+}
+
+</style>
+
 </head>
+
 <body>
 
-    <div class="container">
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
 
-        <h1>Internship Registration</h1>
+<div class="container">
 
-        <form id="studentForm" novalidate>
+<div class="logo">
+🚀
+</div>
 
-            <input 
-                type="text" 
-                id="firstName" 
-                placeholder="First Name"
-                required
-            >
+<h1>Internship Registration</h1>
 
-            <input 
-                type="text" 
-                id="lastName" 
-                placeholder="Last Name"
-                required
-            >
+<p class="subtitle">
+Build your future with our professional internship platform
+</p>
 
-            <input 
-                type="text" 
-                id="domain" 
-                placeholder="Domain"
-                required
-            >
+<form id="studentForm">
 
-            <input 
-                type="tel" 
-                id="whatsapp" 
-                placeholder="10 Digit Phone Number"
-                pattern="[0-9]{10}"
-                maxlength="10"
-                required
-            >
+<div class="input-box">
+<label>First Name</label>
+<input type="text" id="firstName" placeholder="Enter First Name" required>
+</div>
 
-<input
-type="email"
-id="email"
-placeholder="Enter Gmail ID"
-pattern="[a-z0-9._%+-]+@gmail\.com$"
-title="Please enter valid Gmail"
-required>
+<div class="input-box">
+<label>Last Name</label>
+<input type="text" id="lastName" placeholder="Enter Last Name" required>
+</div>
 
-            <input 
-                type="number" 
-                id="tenure" 
-                placeholder="Tenure in Months"
-                min="1"
-                required
-            >
+<div class="input-box">
+<label>Email Address</label>
+<input type="email" id="email" placeholder="Enter Email Address" required>
+</div>
 
-            <input 
-                type="date" 
-                id="joiningDate" 
-                required
-            >
-           <input
-type="file"
-id="excelFile"
-name="excelFile"
-accept=".xlsx,.xls,.csv"
->
+<div class="input-box">
+<label>Whatsapp Number</label>
+<input type="text" id="whatsapp" placeholder="Enter Whatsapp Number" required>
+</div>
 
-<button
-type="button"
-id="uploadExcelBtn"
->
-Upload Excel File
+<div class="input-box">
+
+<label>Select Domain</label>
+
+<select id="domain" required>
+
+<option value="">Choose Your Domain</option>
+
+<option>DevOps</option>
+<option>Cloud Computing</option>
+<option>Python Development</option>
+<option>Java Development</option>
+<option>Web Development</option>
+<option>MERN Stack</option>
+<option>Artificial Intelligence</option>
+<option>Data Science</option>
+<option>Cyber Security</option>
+<option>Software Engineering</option>
+<option>Flutter Development</option>
+<option>AWS Cloud</option>
+
+</select>
+
+</div>
+
+<div class="input-box">
+<label>Joining Date</label>
+<input type="date" id="joiningDate" required>
+</div>
+
+<div class="input-box">
+<label>Internship Tenure</label>
+<input type="number" id="tenure" placeholder="Enter Duration in Months" required>
+</div>
+
+<button type="submit">
+Register Now
 </button>
-            <button type="submit" id="submitBtn">
-Submit 
-</button>
 
-        </form>
+</form>
 
-        <h2 id="result"></h2>
+<div class="footer">
+✨ Professional Internship Portal © 2026
+</div>
 
-    </div>
+</div>
 
-    <script src="script.js"></script>
+<script>
+
+document.getElementById("studentForm")
+.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const studentData = {
+
+        firstName:
+        document.getElementById("firstName").value,
+
+        lastName:
+        document.getElementById("lastName").value,
+
+        email:
+        document.getElementById("email").value,
+
+        whatsapp:
+        document.getElementById("whatsapp").value,
+
+        domain:
+        document.getElementById("domain").value,
+
+        joiningDate:
+        document.getElementById("joiningDate").value,
+
+        tenure:
+        document.getElementById("tenure").value
+    };
+
+    const response = await fetch("/register",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify(studentData)
+    });
+
+    const result = await response.json();
+
+    document.getElementById("studentForm").reset();
+
+setTimeout(() => {
+
+window.location.href = "success.html";
+
+}, 800);
+
+});
+
+</script>
 
 </body>
 </html>

@@ -1,137 +1,198 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Internship Dashboard</title>
 
-    <title>Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
+<style>
 
-        body{
-            font-family: Arial;
-            background:#f5f5f5;
-            padding:20px;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-        h1{
-            text-align:center;
-            color:#333;
-        }
+body{
+    background:#f1f5f9;
+    padding:20px;
+}
 
-        .search-box{
-            margin-bottom:20px;
-            text-align:center;
-        }
+.container{
+    max-width:1600px;
+    margin:auto;
+}
 
-        input{
-            width:300px;
-            padding:10px;
-            border-radius:8px;
-            border:1px solid gray;
-        }
+.header{
+    margin-bottom:25px;
+}
 
-        table{
-            width:100%;
-            border-collapse:collapse;
-            background:white;
-        }
+.header h1{
+    font-size:38px;
+    color:#0f172a;
+    text-align:center;
+}
 
-        th{
-            background:#007bff;
-            color:white;
-            padding:12px;
-        }
+.search-box{
+    margin-bottom:25px;
+}
 
-        td{
-            padding:10px;
-            border-bottom:1px solid #ddd;
-            text-align:center;
-        }
-
-        tr:hover{
-            background:#f1f1f1;
-        }
-        
-
-        button{
-    padding:8px 12px;
+.search-box input{
+    width:100%;
+    padding:16px;
     border:none;
-    border-radius:5px;
+    border-radius:14px;
+    background:white;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    font-size:16px;
+}
+
+.cards-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:20px;
+}
+
+.student-card{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.student-card:hover{
+    transform:translateY(-5px);
+}
+
+.student-name{
+    font-size:22px;
+    font-weight:bold;
+    color:#111827;
+    margin-bottom:15px;
+}
+
+.info{
+    margin-bottom:10px;
+    color:#374151;
+    font-size:15px;
+    word-break:break-word;
+}
+
+.label{
+    font-weight:bold;
+    color:#111827;
+}
+
+.badge{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:20px;
+    background:#dbeafe;
+    color:#1d4ed8;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.button-group{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+button{
+    flex:1;
+    border:none;
+    padding:12px;
+    border-radius:12px;
     color:white;
     cursor:pointer;
-    margin:2px;
+    font-size:15px;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.03);
 }
 
 .edit-btn{
-    background:green;
+    background:#16a34a;
 }
 
 .delete-btn{
-    background:red;
+    background:#dc2626;
 }
-    </style>
+
+@media(max-width:600px){
+
+    .header h1{
+        font-size:28px;
+    }
+
+    .student-card{
+        padding:15px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
- 
+
 <script>
 
 const loginTime = sessionStorage.getItem("dashboardLogin");
 
 if(loginTime){
+
     const currentTime = new Date().getTime();
 
-    if(currentTime - loginTime < 10 * 60 * 1000){
-        // already logged in within 10 minutes
-    } else {
+    if(currentTime - loginTime >= 10 * 60 * 1000){
+
         sessionStorage.removeItem("dashboardLogin");
+
         askPassword();
     }
-} else {
+
+}else{
     askPassword();
 }
 
 function askPassword(){
+
     const password = prompt("Enter Dashboard Password");
 
-    if(password === "Intern2026#"){
+    if(password === "SecurePortal@786"){
+
         sessionStorage.setItem("dashboardLogin", new Date().getTime());
-    } else {
+
+    }else{
+
         alert("Wrong Password");
+
         window.location.href = "index.html";
     }
 }
 
 </script>
 
- <h1>Internship Dashboard</h1>
-       
-    <div class="search-box">
-         <input type="text" 
-    id="searchInput" placeholder="Search Student">
-    </div>
-         
-           <table>
+<div class="container">
 
-           <thead>
-            <tr>
-                <th>Name</th>
-                <th>Employee ID</th>
-                <th>Domain</th>
-                <th>Email</th>
-                <th>Whatsapp</th>
-                <th>Joining Date</th>
-                <th>Tenure</th>
-                <th>Created Time</th>
-                <th>Actions</th>
-            </tr>
+<div class="header">
+<h1>Internship Dashboard</h1>
+</div>
 
-        </thead>
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="Search Student">
+</div>
 
-        <tbody id="tableBody">
+<div class="cards-container" id="cardsContainer">
 
-        </tbody>
+</div>
 
-    </table>
+</div>
 
 <script>
 
@@ -141,47 +202,73 @@ async function loadStudents(){
 
     const students = await response.json();
 
-    const tableBody = document.getElementById("tableBody");
+    const cardsContainer = document.getElementById("cardsContainer");
 
-    tableBody.innerHTML = "";
+    cardsContainer.innerHTML = "";
 
     students.forEach(student => {
 
-        const row = `
-        <tr>
+        const card = `
+        
+        <div class="student-card">
 
-            <td>${student.firstName} ${student.lastName}</td>
+        <div class="student-name">
+        ${student.firstName} ${student.lastName}
+        </div>
 
-            <td>${student.employeeId}</td>
+        <div class="info">
+        <span class="label">Employee ID:</span>
+        ${student.employeeId}
+        </div>
 
-            <td>${student.domain}</td>
+        <div class="info">
+        <span class="label">Domain:</span><br>
+        <span class="badge">${student.domain}</span>
+        </div>
 
-            <td>${student.email}</td>
+        <div class="info">
+        <span class="label">Email:</span>
+        ${student.email}
+        </div>
 
-            <td>${student.whatsapp}</td>
+        <div class="info">
+        <span class="label">Whatsapp:</span>
+        ${student.whatsapp}
+        </div>
 
-            <td>${student.joiningDate}</td>
+        <div class="info">
+        <span class="label">Joining Date:</span>
+        ${student.joiningDate}
+        </div>
 
-            <td>${student.tenure}</td>
+        <div class="info">
+        <span class="label">Tenure:</span>
+        ${student.tenure}
+        </div>
 
-            <td>${new Date(student.createdAt).toLocaleString()}</td>
-                  
-            <td>
- 
-            <button class="edit-btn"
-            onclick="editStudent('$
-            {student._id}')">Edit</button>
+        <div class="info">
+        <span class="label">Updated Time:</span><br>
+        ${new Date(student.updatedAt || student.createdAt).toLocaleString()}
+        </div>
 
-            <button class="delete-btn"
-            onclick="deleteStudent('$
-            {student._id}')">Delete</button>
+        <div class="button-group">
 
-            </td> 
+        <button class="edit-btn"
+        onclick="editStudent('${student._id}')">
+        Edit
+        </button>
 
-        </tr>
+        <button class="delete-btn"
+        onclick="deleteStudent('${student._id}')">
+        Delete
+        </button>
+
+        </div>
+
+        </div>
         `;
 
-        tableBody.innerHTML += row;
+        cardsContainer.innerHTML += card;
 
     });
 
@@ -190,22 +277,26 @@ async function loadStudents(){
 document.getElementById("searchInput")
 .addEventListener("keyup", function(){
 
-    let value = this.value.toLowerCase();
+    const value = this.value.toLowerCase();
 
-    let rows = document.querySelectorAll("tbody tr");
+    const cards = document.querySelectorAll(".student-card");
 
-    rows.forEach(row => {
+    cards.forEach(card => {
 
-        row.style.display =
-        row.innerText.toLowerCase().includes(value)
-        ? ""
+        card.style.display =
+        card.innerText.toLowerCase().includes(value)
+        ? "block"
         : "none";
 
     });
 
 });
 
-loadStudents();
+function editStudent(id){
+
+    window.location.href = `edit.html?id=${id}`;
+
+}
 
 async function deleteStudent(id){
 
@@ -214,7 +305,7 @@ async function deleteStudent(id){
     if(!confirmDelete) return;
 
     await fetch(`/students/${id}`, {
-        method: "DELETE"
+        method:"DELETE"
     });
 
     alert("Student Deleted");
@@ -222,31 +313,9 @@ async function deleteStudent(id){
     loadStudents();
 }
 
-async function editStudent(id){
-
-    const name = prompt("Enter New Name");
-
-    if(!name) return;
-
-    await fetch(`/students/${id}`, {
-
-        method: "PUT",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            firstName: name
-        })
-
-    });
-
-    alert("Student Updated");
-
-    loadStudents();
-}
+loadStudents();
 
 </script>
+
 </body>
 </html>

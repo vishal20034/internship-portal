@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Registration Success</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f172a,#2563eb,#06b6d4);
+overflow:hidden;
+}
+
+.success-box{
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(20px);
+padding:50px 35px;
+border-radius:25px;
+text-align:center;
+width:90%;
+max-width:450px;
+color:white;
+box-shadow:0 10px 40px rgba(0,0,0,0.3);
+animation:pop 0.8s ease;
+}
+
+@keyframes pop{
+0%{
+transform:scale(0.7);
+opacity:0;
+}
+100%{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.check{
+font-size:80px;
+margin-bottom:20px;
+}
+
+h1{
+font-size:34px;
+margin-bottom:15px;
+}
+
+p{
+font-size:17px;
+line-height:28px;
+opacity:0.9;
+margin-bottom:30px;
+}
+
+button{
+padding:15px 35px;
+border:none;
+border-radius:12px;
+background:white;
+color:#2563eb;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:translateY(-3px);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="success-box">
+
+<div class="check">✅</div>
+
+<h1>Registration Successful</h1>
+
+<p>
+Your internship registration has been completed successfully.<br>
+Please check your email for further details.
+</p>
+
+<button onclick="goHome()">
+Back To Registration
+</button>
+
+</div>
+
+<script>
+
+function goHome(){
+
+window.location.href = "/";
+
+}
+
+</script>
+
+</body>
+</html>

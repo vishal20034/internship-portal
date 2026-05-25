@@ -298,9 +298,7 @@ app.get("/students", async (req, res) => {
 
         res.json(students);
 
-    } 
-    
-    catch (error) {
+    } catch (error) {
 
         res.status(500).json({
             message: "Error fetching students"
@@ -310,25 +308,49 @@ app.get("/students", async (req, res) => {
 
 });
 
-app.put("/students/:id", async (req, res) => {
-    try {
+app.put("/students/:id", async (req,res)=>{
+
+    try{
+
         await Student.findByIdAndUpdate(
             req.params.id,
-            {
-                firstName: req.body.firstName
-            }
+            req.body,
+            { new:true }
         );
 
         res.json({
-            message: "Student updated"
+            message:"Student Updated"
         });
 
-    } catch (error) {
+    }catch(error){
+
         res.status(500).json({
-            message: "Error updating student"
+            message:"Update Failed"
         });
+
     }
+
 });
+
+app.get("/students/:id", async (req, res) => {
+
+    try {
+
+        const student = await Student.findById(req.params.id);
+
+        res.json(student);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: "Error fetching student"
+        });
+
+    }
+
+});
+
+
 
 app.delete("/students/:id", async (req, res) => {
     try {
