@@ -322,7 +322,10 @@ app.get("/dashboard", (req, res) => {
 
 app.get("/groups", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "groups.html"));
+});app.get("/groups", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "groups.html"));
 });
+
 
 app.get("/students", async (req, res) => {
 
