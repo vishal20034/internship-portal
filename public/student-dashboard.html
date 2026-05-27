@@ -376,6 +376,7 @@ window.location.href = "/login.html";
 
 const employeeId = student.employeeId;
 const domain = student.domain;
+console.log(domain);
 const studentName =
 student.name ||
 student.fullName ||
@@ -403,7 +404,7 @@ const tasksByDomain = {
 "Dockerize node app"
 ],
 
-"Python":[
+"Python Development":[
 "Create calculator project",
 "Build API using Flask"
 ],
@@ -606,7 +607,7 @@ closeSubmissionModal();
 
 loadStudentSubmissions();
 
-}else{
+} else {
 
 Swal.fire({
 icon:"error",
@@ -619,7 +620,7 @@ confirmButtonColor:"#ff1744"
 
 }
 
-}catch(error){
+} catch(error){
 
 console.log(error);
 
@@ -824,9 +825,9 @@ console.log(latest);
 if(!latest){
 
 btn.innerText =
-"Submit Task First";
+"Mark Attendance";
 
-btn.disabled = true;
+btn.disabled = false;
 
 btn.classList.add(
 "attendance-disabled"
