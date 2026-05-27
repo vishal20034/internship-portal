@@ -15,8 +15,13 @@ const studentsSchema = new mongoose.Schema({
     tenure: String,
 
     joiningDate: String,
+    
+    employeeId: String,
 
-    employeeId: String
+password: {
+type: String,
+default: "intern123"
+}
 
 }, {
     timestamps: true

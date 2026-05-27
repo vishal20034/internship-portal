@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Intern Registration</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+min-height:100vh;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+padding:30px;
+
+background:
+linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.8)),
+url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop');
+
+background-size:cover;
+background-position:center;
+
+}
+
+.container{
+
+width:100%;
+max-width:1200px;
+
+display:grid;
+grid-template-columns:1fr 1fr;
+
+background:rgba(255,255,255,0.06);
+
+backdrop-filter:blur(18px);
+
+border-radius:30px;
+
+overflow-y:auto;
+
+border:1px solid rgba(255,255,255,0.08);
+
+box-shadow:0 15px 40px rgba(0,0,0,0.5);
+
+}
+
+.left{
+
+padding:20px;
+
+background:linear-gradient(135deg,#0072ff,#00c6ff);
+
+color:white;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+
+}
+
+.left h1{
+
+font-size:55px;
+margin-bottom:25px;
+
+}
+
+.left p{
+
+font-size:18px;
+line-height:1.8;
+
+margin-bottom:40px;
+
+}
+
+.feature{
+
+margin-bottom:20px;
+font-size:17px;
+
+}
+
+.right{
+
+padding:50px;
+
+background:rgba(10,15,35,0.95);
+
+}
+
+.title{
+
+font-size:36px;
+font-weight:700;
+
+text-align:center;
+
+color:white;
+
+margin-bottom:10px;
+
+}
+
+.subtitle{
+
+text-align:center;
+
+color:#8ca0ba;
+
+margin-bottom:35px;
+
+}
+
+.input-box{
+
+margin-bottom:18px;
+
+}
+
+.input-box label{
+
+display:block;
+
+margin-bottom:8px;
+
+color:white;
+
+font-size:14px;
+
+}
+
+.input-box input,
+.input-box select{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+outline:none;
+
+border-radius:14px;
+
+background:rgba(255,255,255,0.08);
+
+color:white;
+
+font-size:15px;
+
+appearance:none;
+
+}
+
+.input-box input::placeholder{
+color:#cfd7e3;
+}
+
+.input-box select option{
+
+background:#0d1733;
+color:white;
+
+}
+
+.register-btn{
+
+width:100%;
+
+padding:16px;
+
+border:none;
+
+border-radius:16px;
+
+background:linear-gradient(45deg,#00c6ff,#0072ff);
+
+color:white;
+
+font-size:17px;
+font-weight:600;
+
+cursor:pointer;
+
+transition:0.3s;
+
+margin-top:10px;
+
+}
+
+.register-btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 10px 25px rgba(0,114,255,0.4);
+
+}
+
+.extra-buttons{
+
+display:flex;
+gap:10px;
+
+margin-top:20px;
+
+}
+
+.extra-buttons button{
+
+flex:1;
+
+padding:13px;
+
+border:none;
+
+border-radius:12px;
+
+background:rgba(255,255,255,0.08);
+
+color:white;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+.extra-buttons button:hover{
+
+background:rgba(255,255,255,0.15);
+
+}
+
+.loading{
+
+display:none;
+
+text-align:center;
+
+margin-top:15px;
+
+color:#00ffd5;
+
+}
+
+.footer{
+
+margin-top:25px;
+
+text-align:center;
+
+font-size:13px;
+
+color:#8ca0ba;
+
+}
+
+.already-box{
+
+display:none;
+
+margin-top:25px;
+
+padding:25px;
+
+border-radius:20px;
+
+background:rgba(255,255,255,0.08);
+
+text-align:center;
+
+color:white;
+
+animation:fadeIn 0.5s ease;
+
+}
+
+.already-box h2{
+
+font-size:28px;
+
+margin-bottom:10px;
+
+}
+
+.employee-id{
+
+margin-top:15px;
+
+font-size:22px;
+
+font-weight:700;
+
+color:#00ffd5;
+
+word-break:break-word;
+
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+@media(max-width:900px){
+
+.container{
+grid-template-columns:1fr;
+}
+
+.left{
+display:none;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left">
+
+<h1>
+🚀 Build Your Career
+</h1>
+
+<p>
+Join our professional internship platform and gain real-world experience in Cloud, DevOps, AI, Cyber Security, Web Development and more.
+</p>
+
+<div class="feature">📊 Real Industry Projects</div>
+<div class="feature">📈 Live Performance Tracking</div>
+<div class="feature">🎓 Internship Certificate</div>
+<div class="feature">🧠 Professional Mentorship</div>
+
+</div>
+
+<div class="right">
+
+<div class="title">
+Intern Registration
+</div>
+
+<div class="subtitle">
+Create your internship account
+</div>
+
+<form id="registerForm">
+
+<div class="input-box">
+<label>First Name</label>
+<input type="text" id="firstName" placeholder="Enter First Name" required>
+</div>
+
+<div class="input-box">
+<label>Last Name</label>
+<input type="text" id="lastName" placeholder="Enter Last Name" required>
+</div>
+
+<div class="input-box">
+<label>Email Address</label>
+<input type="email" id="email" placeholder="Enter Email Address" required>
+</div>
+
+<div class="input-box">
+<label>WhatsApp Number</label>
+<input type="text" id="whatsapp" placeholder="Enter WhatsApp Number" required>
+</div>
+
+<div class="input-box">
+
+<label>Select Domain</label>
+
+<select id="domain" required>
+
+<option value="">Choose Domain</option>
+
+<option>DevOps</option>
+
+<option>Cloud Computing</option>
+
+<option>Python Development</option>
+
+<option>Java Development</option>
+
+<option>Web Development</option>
+
+<option>MERN Stack Development</option>
+
+<option>Artificial Intelligence</option>
+
+<option>Data Science</option>
+
+<option>Cyber Security</option>
+
+<option>Software Engineering</option>
+
+<option>Flutter Development</option>
+
+<option>AWS Cloud</option>
+
+</select>
+
+</div>
+
+<div class="input-box">
+
+<label>Internship Duration</label>
+
+<select id="tenure" required>
+
+<option value="">Choose Duration</option>
+
+<option>1 Month</option>
+<option>3 Months</option>
+<option>6 Months</option>
+
+</select>
+
+</div>
+
+<button type="submit" class="register-btn">
+🚀 Register Now
+</button>
+
+<div class="loading" id="loadingText">
+Creating your account...
+</div>
+
+</form>
+
+<div class="already-box" id="alreadyBox">
+
+<h2>
+⚠ Already Registered
+</h2>
+
+<p>
+You are already registered in TEN Internship Portal
+</p>
+
+<div class="employee-id" id="employeeIdText">
+</div>
+
+<br>
+
+<button class="register-btn"
+onclick="window.location.href='login.html'">
+Go To Login
+</button>
+
+</div>
+
+<div class="extra-buttons">
+
+<button onclick="window.location.href='login.html'">
+🎓 Student Login
+</button>
+
+<button onclick="window.location.href='coordinator-login.html'">
+🛡 Coordinator Login
+</button>
+
+</div>
+
+<div class="extra-buttons">
+
+<button onclick="window.location.href='index.html'">
+🏠 Homepage
+</button>
+
+</div>
+
+<div class="footer">
+Internship Management System © 2026
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const form =
+document.getElementById("registerForm");
+
+form.addEventListener("submit", async(e)=>{
+
+e.preventDefault();
+
+document.getElementById("loadingText")
+.style.display="block";
+
+try{
+
+const response = await fetch("/register",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+firstName:
+document.getElementById("firstName").value,
+
+lastName:
+document.getElementById("lastName").value,
+
+email:
+document.getElementById("email").value,
+
+whatsapp:
+document.getElementById("whatsapp").value,
+
+domain:
+document.getElementById("domain").value,
+
+tenure:
+document.getElementById("tenure").value,
+
+joiningDate:
+new Date()
+
+})
+
+});
+
+const data = await response.json();
+
+document.getElementById("loadingText")
+.style.display="none";
+
+if(data.success){
+
+window.location.href="success.html";
+
+setTimeout(()=>{
+
+window.location.href="groups.html";
+
+},4000);
+
+}
+
+else if(data.already){
+
+document.getElementById("registerForm")
+.style.display="none";
+
+document.getElementById("alreadyBox")
+.style.display="block";
+
+document.getElementById("employeeIdText")
+.innerText =
+"Employee ID: " + data.employeeId;
+
+}
+
+else{
+
+alert("Registration Failed");
+
+}
+
+}catch(error){
+
+document.getElementById("loadingText")
+.style.display="none";
+
+console.log(error);
+
+alert("Server Error");
+
+}
+
+});
+
+</script>
+
+</body>
+</html>

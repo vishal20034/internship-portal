@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#071120;
+color:white;
+padding:20px;
+}
+
+.top-card{
+background:linear-gradient(90deg,#0d6efd,#1f8fff);
+padding:30px;
+border-radius:20px;
+margin-bottom:20px;
+}
+
+.top-card h1{
+font-size:45px;
+}
+
+.top-card p{
+margin-top:10px;
+font-size:18px;
+opacity:0.8;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:25px;
+}
+
+.stat-box{
+background:#101a2f;
+padding:25px;
+border-radius:18px;
+}
+
+.stat-box h2{
+font-size:18px;
+margin-bottom:15px;
+color:#9ac7ff;
+}
+
+.stat-box h1{
+font-size:45px;
+}
+
+.notice-box,
+.tasks-box,
+.submissions-box,
+.attendance-box{
+background:#101a2f;
+padding:25px;
+border-radius:20px;
+margin-bottom:25px;
+}
+
+.section-title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.section-title h2{
+font-size:32px;
+}
+
+.badge{
+background:#0d6efd;
+padding:8px 15px;
+border-radius:30px;
+font-size:14px;
+}
+
+.task-card,
+.submission-card{
+background:#0f1728;
+padding:20px;
+border-radius:15px;
+margin-bottom:15px;
+}
+
+.task-card h3,
+.submission-card h3{
+margin-bottom:10px;
+}
+
+button{
+border:none;
+padding:14px 22px;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary-btn{
+background:#12d8fa;
+color:white;
+}
+
+.attendance-btn{
+background:#24d66c;
+color:white;
+}
+
+.attendance-disabled{
+background:gray !important;
+cursor:not-allowed;
+}
+
+.links{
+margin-top:10px;
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.links a{
+color:#59b7ff;
+text-decoration:none;
+}
+
+.status-pill{
+padding:6px 14px;
+border-radius:20px;
+font-size:13px;
+font-weight:bold;
+display:inline-block;
+margin-top:10px;
+}
+
+.status-approved{
+background:#1db954;
+}
+
+.status-rejected{
+background:#ff4d4d;
+}
+
+.status-pending{
+background:#ffaa00;
+}
+
+.review-box{
+background:#151f35;
+padding:15px;
+border-radius:12px;
+margin-top:15px;
+}
+
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.modal-content{
+background:#101a2f;
+padding:30px;
+border-radius:20px;
+width:90%;
+max-width:500px;
+}
+
+.modal-content input,
+.modal-content textarea{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border:none;
+border-radius:10px;
+background:#0b1323;
+color:white;
+}
+
+.close-btn{
+background:red;
+color:white;
+margin-left:10px;
+}
+
+.empty-state{
+opacity:0.6;
+padding:15px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="top-card">
+<h1 id="welcomeText">Welcome 🚀</h1>
+<p id="domainText">Domain</p>
+</div>
+
+<div class="stats">
+
+<div class="stat-box">
+<h2>Attendance</h2>
+<h1 id="attendanceText">0%</h1>
+</div>
+
+<div class="stat-box">
+<h2>Tasks Completed</h2>
+<h1 id="tasksCompletedText">0</h1>
+</div>
+
+<div class="stat-box">
+<h2>Meetings Joined</h2>
+<h1 id="meetingsJoinedText">0</h1>
+</div>
+
+<div class="stat-box">
+<h2>Performance</h2>
+<h1 id="performanceText">B</h1>
+</div>
+
+</div>
+
+<div class="notice-box">
+
+<div class="section-title">
+<h2>📢 Important Notice</h2>
+<span class="badge">Live from coordinator</span>
+</div>
+
+<h3 id="noticeTitle">Announcement</h3>
+
+<p id="noticeText">
+Loading notice...
+</p>
+
+<br>
+
+<p>
+🌅 Morning Meeting:
+<span id="morningTime">
+Not updated
+</span>
+</p>
+
+<br>
+
+<p>
+🌙 Evening Meeting:
+<span id="eveningTime">
+Not updated
+</span>
+</p>
+
+<br>
+
+<a id="meetLink" href="#" target="_blank">
+Join Meeting
+</a>
+
+</div>
+
+<div class="tasks-box">
+
+<div class="section-title">
+<h2>📚 Your Domain Tasks</h2>
+<span class="badge">Domain</span>
+</div>
+
+<div id="tasksContainer"></div>
+
+</div>
+
+<div class="submissions-box">
+
+<div class="section-title">
+<h2>📥 Submitted Tasks</h2>
+<span class="badge">Task History</span>
+</div>
+
+<div id="submissionContainer"></div>
+
+</div>
+
+<div class="attendance-box">
+
+<div class="section-title">
+<div>
+<h2>🪪 Attendance</h2>
+<p id="attendanceStatus">
+Status not updated yet
+</p>
+</div>
+
+<button
+id="attendanceBtn"
+class="attendance-btn"
+onclick="giveAttendance()"
+>
+Give Attendance
+</button>
+
+</div>
+
+</div>
+
+<div class="modal" id="submissionModal">
+
+<div class="modal-content">
+
+<h2 style="margin-bottom:20px;">
+Submit Task
+</h2>
+
+<input
+type="text"
+id="githubLink"
+placeholder="GitHub Link"
+>
+
+<textarea
+id="note"
+placeholder="Write note"
+rows="5"
+></textarea>
+
+<input type="file" id="imageFile">
+
+<input type="file" id="pdfFile">
+
+<button
+class="primary-btn"
+onclick="submitTask()"
+>
+Submit
+</button>
+
+<button
+class="close-btn"
+onclick="closeSubmissionModal()"
+>
+Close
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const student = JSON.parse(localStorage.getItem("student"));
+
+if(!student){
+window.location.href = "/login.html";
+}
+
+const employeeId = student.employeeId;
+const domain = student.domain;
+const studentName =
+student.name ||
+student.fullName ||
+student.username ||
+"Student";
+
+document.getElementById("welcomeText")
+.innerText = `Welcome ${studentName} 🚀`;
+
+document.getElementById("domainText")
+.innerText = `Domain : ${domain}`;
+
+let currentTask = "";
+let latestSubmissions = [];
+
+const tasksByDomain = {
+
+"Cloud Computing":[
+"Deploy static website on AWS",
+"Create EC2 instance"
+],
+
+"DevOps":[
+"Install Jenkins",
+"Dockerize node app"
+],
+
+"Python":[
+"Create calculator project",
+"Build API using Flask"
+],
+
+"Java":[
+"Bank management system",
+"OOP concepts demo"
+],
+
+"Web Development":[
+"Responsive landing page",
+"Portfolio website"
+],
+
+"MERN Stack":[
+"Todo fullstack app",
+"Authentication system"
+],
+
+"Artificial Intelligence":[
+"AI chatbot",
+"Image classifier"
+],
+
+"Data Science":[
+"Data visualization",
+"Pandas analysis"
+],
+
+"Cyber Security":[
+"Nmap scan",
+"Security audit"
+],
+
+"Software Engineering":[
+"Agile sprint plan",
+"SDLC document"
+],
+
+"Flutter Development":[
+"Flutter UI demo",
+"Firebase auth"
+]
+
+};
+
+async function loadNotice(){
+
+try{
+
+const student =
+JSON.parse(localStorage.getItem("student"));
+
+const response =
+await fetch(
+"/get-notice/" + student.domain
+);
+
+const data =
+await response.json();
+
+document.getElementById("noticeTitle")
+.innerText =
+data.title || "Important Notice";
+
+document.getElementById("noticeText")
+.innerText =
+data.importantNotice || "No notice";
+
+document.getElementById("morningTime")
+.innerText =
+data.morningMeeting || "Not updated";
+
+document.getElementById("eveningTime")
+.innerText =
+data.eveningMeeting || "Not updated";
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+function renderTasks(){
+
+const container =
+document.getElementById("tasksContainer");
+
+const tasks =
+tasksByDomain[domain] || [];
+
+if(tasks.length===0){
+
+container.innerHTML =
+`<div class="empty-state">
+No tasks available
+</div>`;
+
+return;
+
+}
+
+container.innerHTML =
+tasks.map((task,index)=>`
+
+<div class="task-card">
+
+<h3>
+Task ${index+1}
+</h3>
+
+<p>${task}</p>
+
+<br>
+
+<button
+class="primary-btn"
+onclick="openSubmissionModal(${index})"
+>
+Submit Task
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+function openSubmissionModal(index){
+
+currentTask =
+tasksByDomain[domain][index];
+
+document.getElementById("submissionModal")
+.style.display = "flex";
+
+}
+
+function closeSubmissionModal(){
+
+document.getElementById("submissionModal")
+.style.display = "none";
+
+}
+
+async function submitTask(){
+
+try{
+
+const githubLink =
+document.getElementById("githubLink").value;
+
+const note =
+document.getElementById("note").value;
+
+const image =
+document.getElementById("imageFile").files[0];
+
+const pdf =
+document.getElementById("pdfFile").files[0];
+
+const formData = new FormData();
+
+formData.append("employeeId",employeeId);
+formData.append("domain",domain);
+formData.append("githubLink",githubLink);
+formData.append("note",note);
+
+if(image){
+formData.append("image",image);
+}
+
+if(pdf){
+formData.append("pdf",pdf);
+}
+
+const response =
+await fetch("/submit-task",{
+method:"POST",
+body:formData
+});
+
+const data =
+await response.json();
+
+if(data.success){
+
+Swal.fire({
+icon:"success",
+title:"Task Submitted",
+text:"Your task uploaded successfully 🚀",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#00c853"
+});
+
+closeSubmissionModal();
+
+loadStudentSubmissions();
+
+}else{
+
+Swal.fire({
+icon:"error",
+title:"Submission Failed",
+text:"Task submission was not successful",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#ff1744"
+});
+
+}
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+function getStatusClass(status){
+
+if(status==="Approved"){
+return "status-approved";
+}
+
+if(status==="Rejected"){
+return "status-rejected";
+}
+
+return "status-pending";
+
+}
+
+async function loadStudentSubmissions(){
+
+try{
+
+const response = await fetch(`/student-submissions/${encodeURIComponent(employeeId)}`);
+
+const data =
+await response.json();
+
+const submissions =
+data.submissions || [];
+
+latestSubmissions = submissions;
+
+renderSubmissions(submissions);
+
+updateAttendanceButton(submissions);
+
+updateStats(submissions);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+function updateStats(submissions){
+
+const approved =
+submissions.filter(
+s=>s.status==="Approved"
+).length;
+
+const attendanceDone =
+submissions.filter(
+s=>s.attendanceGiven===true
+).length;
+
+let totalDays = 20;
+
+const duration =
+submissions[0]?.internshipDuration;
+
+if(duration === "3 Months"){
+totalDays = 60;
+}
+
+if(duration === "6 Months"){
+totalDays = 120;
+}
+
+const attendancePercentage =
+Math.round(
+(attendanceDone / totalDays) * 100
+);
+
+document.getElementById("attendanceText")
+.innerText =
+`${attendancePercentage}%`;
+
+document.getElementById("tasksCompletedText")
+.innerText =
+approved;
+
+document.getElementById("meetingsJoinedText")
+.innerText =
+attendanceDone;
+
+document.getElementById("performanceText")
+.innerText =
+approved>=5
+? "A+"
+: approved>=3
+? "A"
+: approved>=1
+? "B"
+: "C";
+
+}
+
+function renderSubmissions(submissions){
+
+const container =
+document.getElementById("submissionContainer");
+
+if(submissions.length===0){
+
+container.innerHTML =
+`<div class="empty-state">
+No submissions yet
+</div>`;
+
+return;
+
+}
+
+container.innerHTML =
+submissions.map(sub=>`
+
+<div class="submission-card">
+
+<h3>
+${sub.task || "Submitted Task"}
+</h3>
+
+<p>
+<b>Domain:</b>
+${sub.domain}
+</p>
+
+<p>
+<b>Note:</b>
+${sub.note || "No note"}
+</p>
+
+<span class="
+status-pill
+${getStatusClass(sub.status)}
+">
+${sub.status}
+</span>
+
+<div class="links">
+
+<a
+href="${sub.githubLink || '#'}"
+target="_blank"
+>
+GitHub
+</a>
+
+<a
+href="${sub.image || '#'}"
+target="_blank"
+>
+Screenshot
+</a>
+
+<a
+href="${sub.pdf || '#'}"
+target="_blank"
+>
+PDF
+</a>
+
+</div>
+
+<div class="review-box">
+
+<h4>
+Coordinator Review
+</h4>
+
+<br>
+
+<p>
+${sub.feedback || "No Feedback Yet"}
+</p>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+function updateAttendanceButton(submissions){
+
+const btn =
+document.getElementById("attendanceBtn");
+
+const latest =
+submissions[0];
+
+console.log(submissions);
+console.log(latest);
+
+if(!latest){
+
+btn.innerText =
+"Submit Task First";
+
+btn.disabled = true;
+
+btn.classList.add(
+"attendance-disabled"
+);
+
+return;
+
+}
+
+if(
+latest.status !== "Approved" &&
+latest.status !== "Rejected"
+){
+
+btn.innerText =
+"Waiting For Approval";
+
+btn.disabled = true;
+
+btn.classList.add(
+"attendance-disabled"
+);
+
+return;
+}
+
+if(latest.attendanceGiven){
+
+btn.innerText =
+"Attendance Submitted";
+
+btn.disabled = true;
+
+btn.classList.add(
+"attendance-disabled"
+);
+
+return;
+
+}
+
+btn.innerText =
+"Give Attendance";
+
+btn.disabled = false;
+
+btn.classList.remove(
+"attendance-disabled"
+);
+
+}
+
+async function giveAttendance(){
+
+try{
+
+const latest =
+latestSubmissions[0];
+
+if(!latest){
+
+Swal.fire({
+icon:"warning",
+title:"Task Required",
+text:"Please submit your task first",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#ff9800"
+});
+
+return;
+
+}
+
+const response =
+await fetch("/give-attendance",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+employeeId
+})
+
+});
+
+const data =
+await response.json();
+
+if(data.success){
+
+Swal.fire({
+icon:"success",
+title:"Attendance Marked",
+text:"Your attendance has been recorded",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#00c853"
+});
+
+loadStudentSubmissions();
+
+}else{
+
+Swal.fire({
+icon:"error",
+title:"Attendance Failed",
+text:data.message,
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#ff1744"
+});
+
+}
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+loadNotice();
+
+renderTasks();
+
+loadStudentSubmissions();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</body>
+</html>

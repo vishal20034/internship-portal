@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Coordinator Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#020617;
+color:white;
+padding:20px;
+}
+
+.banner{
+background:linear-gradient(to right,#2563eb,#1d4ed8);
+padding:30px;
+border-radius:22px;
+margin-bottom:25px;
+position:relative;
+overflow:hidden;
+}
+
+.banner::before{
+content:"";
+position:absolute;
+width:250px;
+height:250px;
+background:rgba(255,255,255,0.08);
+border-radius:50%;
+top:-120px;
+right:-70px;
+}
+
+.banner h1{
+font-size:52px;
+margin-bottom:10px;
+position:relative;
+z-index:2;
+}
+
+.banner p{
+font-size:20px;
+opacity:.9;
+position:relative;
+z-index:2;
+}
+
+.notice-card{
+background:#111827;
+padding:25px;
+border-radius:20px;
+margin-bottom:25px;
+border:1px solid #1e293b;
+}
+
+.notice-card h2{
+margin-bottom:20px;
+color:#38bdf8;
+}
+
+input,textarea{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border:none;
+outline:none;
+border-radius:12px;
+background:#1e293b;
+color:white;
+font-size:16px;
+}
+
+textarea{
+height:120px;
+resize:none;
+}
+
+button{
+padding:12px 22px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
+}
+
+button:hover{
+transform:translateY(-2px);
+}
+
+.primary-btn{
+background:#06b6d4;
+color:white;
+}
+
+.approve-btn{
+background:#22c55e;
+color:white;
+margin-right:10px;
+}
+
+.reject-btn{
+background:#ef4444;
+color:white;
+}
+
+.refresh-btn{
+
+background:#2563eb;
+color:white;
+
+border:none;
+
+padding:12px 20px;
+
+border-radius:12px;
+
+cursor:pointer;
+
+font-weight:bold;
+
+position:absolute;
+
+top:25px;
+right:25px;
+
+z-index:999;
+
+}
+
+.submission-wrapper{
+margin-top:30px;
+}
+
+.submission-wrapper h2{
+margin-bottom:20px;
+}
+
+.submission-card{
+background:#111827;
+padding:22px;
+border-radius:20px;
+margin-bottom:20px;
+border:1px solid #1e293b;
+transition:0.3s;
+}
+
+.submission-card:hover{
+transform:translateY(-3px);
+border-color:#38bdf8;
+}
+
+.submission-card h3{
+color:#38bdf8;
+margin-bottom:10px;
+}
+
+.info-line{
+margin-top:10px;
+font-size:16px;
+}
+
+.status-pill{
+padding:7px 16px;
+border-radius:999px;
+font-size:14px;
+font-weight:bold;
+display:inline-block;
+margin-top:14px;
+margin-bottom:14px;
+}
+
+.pending{
+background:#f59e0b;
+}
+
+.approved{
+background:#22c55e;
+}
+
+.rejected{
+background:#ef4444;
+}
+
+.links{
+display:flex;
+gap:18px;
+flex-wrap:wrap;
+margin-top:14px;
+margin-bottom:16px;
+}
+
+.links a{
+color:#38bdf8;
+text-decoration:none;
+font-weight:bold;
+}
+
+.feedback-box{
+margin-top:16px;
+}
+
+.feedback-box textarea{
+height:90px;
+}
+
+.empty-state{
+background:#111827;
+padding:35px;
+border-radius:20px;
+text-align:center;
+font-size:18px;
+color:#94a3b8;
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:25px;
+}
+
+.stat-card{
+background:#111827;
+padding:25px;
+border-radius:20px;
+border:1px solid #1e293b;
+}
+
+.stat-card h3{
+margin-bottom:10px;
+color:#94a3b8;
+}
+
+.stat-card h1{
+font-size:40px;
+color:#38bdf8;
+}
+
+@media(max-width:768px){
+
+body{
+padding:15px;
+}
+
+.banner{
+padding:25px;
+}
+
+.banner h1{
+font-size:34px;
+}
+
+.banner p{
+font-size:16px;
+}
+
+.refresh-btn{
+float:none;
+width:100%;
+margin-bottom:20px;
+}
+
+.stats-grid{
+grid-template-columns:1fr;
+}
+
+.links{
+flex-direction:column;
+gap:10px;
+}
+
+button{
+width:100%;
+margin-bottom:10px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="banner">
+
+<button
+class="refresh-btn"
+onclick="window.location.reload()"
+>
+🔄 Refresh
+</button>
+
+<h1>
+Coordinator Dashboard 🚀
+</h1>
+
+<p id="domainTitle">
+Managing submissions dynamically
+</p>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<h3>Total Work Submissions</h3>
+<h1 id="totalStudents">0</h1>
+</div>
+
+<div class="stat-card">
+<h3>Approved Tasks</h3>
+<h1 id="approvedTasks">0</h1>
+</div>
+
+<div class="stat-card">
+<h3>Rejected Tasks</h3>
+<h1 id="rejectedTasks">0</h1>
+</div>
+
+<div class="stat-card">
+<h3>Attendance Given</h3>
+<h1 id="attendanceCount">0</h1>
+</div>
+
+</div>
+
+<div class="notice-card">
+
+<h2>
+📢 Edit Meeting Notice
+</h2>
+
+<input
+type="text"
+id="morningMeeting"
+placeholder="Morning Meeting Time"
+/>
+
+<input
+type="text"
+id="eveningMeeting"
+placeholder="Evening Meeting Time"
+/>
+
+<input
+type="text"
+id="meetingLink"
+placeholder="Google Meet Link"
+/>
+
+<textarea
+id="importantNotice"
+placeholder="Write important notice"
+></textarea>
+
+<button
+class="primary-btn"
+onclick="updateNotice()"
+>
+Update Notice
+</button>
+
+</div>
+
+<div class="submission-wrapper">
+
+<h2>
+📂 Student Task Submissions
+</h2>
+
+<div id="submissionContainer"></div>
+
+</div>
+
+<script>
+
+const coordinatorDomain =
+JSON.parse(
+sessionStorage.getItem(
+"coordinatorDomain"
+)
+);
+
+const isLoggedIn =
+sessionStorage.getItem(
+"coordinatorLoggedIn"
+);
+
+console.log(isLoggedIn);
+
+if(
+isLoggedIn !== "true"
+){
+
+window.location.href =
+"coordinator-login.html";
+
+}
+
+document.getElementById(
+"domainTitle"
+).innerText =
+
+Array.isArray(coordinatorDomain)
+
+? "Managing " +
+coordinatorDomain.join(" & ") +
+" submissions"
+
+: "Managing " +
+coordinatorDomain +
+" submissions";
+
+function getStatusClass(status){
+
+if(status === "Approved"){
+return "approved";
+}
+
+if(status === "Rejected"){
+return "rejected";
+}
+
+return "pending";
+
+}
+
+async function updateNotice(){
+
+try{
+
+const response = await fetch(
+"/update-notice",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+domain:Array.isArray(coordinatorDomain)
+? coordinatorDomain[0]
+: coordinatorDomain,
+
+morningMeeting:
+document.getElementById(
+"morningMeeting"
+).value,
+
+eveningMeeting:
+document.getElementById(
+"eveningMeeting"
+).value,
+
+meetingLink:
+document.getElementById(
+"meetingLink"
+).value,
+
+importantNotice:
+document.getElementById(
+"importantNotice"
+).value
+
+})
+
+});
+
+const data = await response.json();
+
+if(data.success){
+
+Swal.fire({
+icon:"success",
+title:"Notice Updated",
+text:"Meeting notice updated successfully",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#00c853"
+});
+
+}else{
+
+Swal.fire({
+icon:"error",
+title:"Update Failed",
+text:"Unable to update notice",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#ff1744"
+});
+
+}
+
+}catch(error){
+
+console.log(error);
+
+Swal.fire({
+icon:"error",
+title:"Server Error",
+text:"Please try again later",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#ff1744"
+});
+
+}
+
+}
+
+async function loadSubmissions(){
+
+try{
+
+const response = await fetch(
+"/all-submissions/" +
+coordinatorDomain
+);
+
+const submissions =
+await response.json();
+
+const container =
+document.getElementById(
+"submissionContainer"
+);
+
+if(submissions.length === 0){
+
+container.innerHTML = `
+<div class="empty-state">
+No submissions found for
+${coordinatorDomain}
+</div>
+`;
+
+return;
+
+}
+
+document.getElementById(
+"totalStudents"
+).innerText = submissions.length;
+
+document.getElementById(
+"approvedTasks"
+).innerText =
+submissions.filter(
+s=>s.status==="Approved"
+).length;
+
+document.getElementById(
+"rejectedTasks"
+).innerText =
+submissions.filter(
+s=>s.status==="Rejected"
+).length;
+
+document.getElementById(
+"attendanceCount"
+).innerText =
+submissions.filter(
+s=>s.attendanceGiven
+).length;
+
+container.innerHTML =
+submissions.map(sub=>`
+
+<div class="submission-card">
+
+<h3>
+${sub.employeeId}
+</h3>
+
+<div class="info-line">
+<b>Domain:</b>
+${sub.domain}
+</div>
+
+<div class="info-line">
+<b>Task:</b>
+${sub.task || "Submitted Task"}
+</div>
+
+<div class="info-line">
+<b>Attendance:</b>
+${sub.attendanceGiven ? "✅ Given" : "❌ Not Given"}
+</div>
+
+<div class="info-line">
+<b>Attendance Count:</b>
+${sub.attendanceCount || 0}
+</div>
+
+<div class="info-line">
+<b>Tasks Completed:</b>
+${sub.tasksCompleted || 0}
+</div>
+
+<div class="info-line">
+<b>Meetings Joined:</b>
+${sub.meetingsJoined || 0}
+</div>
+
+<div class="info-line">
+<b>Performance:</b>
+${sub.performance || "B"}
+</div>
+
+<div class="
+status-pill
+${getStatusClass(sub.status)}
+">
+${sub.status}
+</div>
+
+<div class="links">
+
+<a
+href="${sub.githubLink || '#'}"
+target="_blank"
+>
+GitHub
+</a>
+
+<a
+href="${sub.image || '#'}"
+target="_blank"
+>
+Screenshot
+</a>
+
+<a
+href="${sub.pdf || '#'}"
+target="_blank"
+>
+PDF
+</a>
+
+</div>
+
+<div class="feedback-box">
+
+<textarea
+id="feedback-${sub._id}"
+placeholder="Write feedback"
+>${sub.feedback || ""}</textarea>
+
+<button
+class="approve-btn"
+onclick="updateStatus(
+'${sub._id}',
+'Approved'
+)"
+>
+Approve
+</button>
+
+<button
+class="reject-btn"
+onclick="updateStatus(
+'${sub._id}',
+'Rejected'
+)"
+>
+Reject
+</button>
+
+</div>
+
+</div>
+
+`).join('');
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+async function updateStatus(id,status){
+
+try{
+
+const feedback =
+document.getElementById(
+"feedback-" + id
+).value;
+
+const response = await fetch(
+"/update-status",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+id,
+status,
+feedback,
+domain:coordinatorDomain
+
+})
+
+});
+
+const data = await response.json();
+
+if(data.success){
+
+Swal.fire({
+icon:"success",
+title:"Task Updated",
+text:"Student task status updated successfully 🚀",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#00c853"
+});
+
+loadSubmissions();
+
+}else{
+
+Swal.fire({
+icon:"error",
+title:"Update Failed",
+text:"Unable to update task status",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#ff1744"
+});
+
+}
+
+}catch(error){
+
+console.log(error);
+
+Swal.fire({
+icon:"warning",
+title:"Server Error",
+text:"Please try again later",
+background:"#101820",
+color:"#ffffff",
+confirmButtonColor:"#ff9800"
+});
+
+}
+
+}
+
+loadSubmissions();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</body>
+</html>

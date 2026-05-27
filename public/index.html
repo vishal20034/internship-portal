@@ -1,318 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Internship Registration</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Internship Management Portal</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
 
 body{
 
-    min-height:100vh;
+min-height:100vh;
 
-    display:flex;
+display:flex;
+justify-content:center;
+align-items:center;
 
-    justify-content:center;
+background:
+linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.8)),
+url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop');
 
-    align-items:center;
+background-size:cover;
+background-position:center;
 
-    overflow:auto;
+overflow-y:auto;
+padding:20px;
 
-    padding:20px;
-
-    background:
-    linear-gradient(-45deg,
-    #0f172a,
-    #1e3a8a,
-    #7c3aed,
-    #06b6d4);
-
-    background-size:400% 400%;
-
-    animation:gradientBG 12s ease infinite;
-}
-
-@keyframes gradientBG{
-
-    0%{
-        background-position:0% 50%;
-    }
-
-    50%{
-        background-position:100% 50%;
-    }
-
-    100%{
-        background-position:0% 50%;
-    }
 }
 
 .container{
 
-    width:100%;
+width:100%;
+max-width:1200px;
 
-    max-width:560px;
+display:grid;
+grid-template-columns:1fr 1fr;
 
-    padding:40px;
+background:rgba(255,255,255,0.06);
 
-    border-radius:30px;
+backdrop-filter:blur(18px);
 
-    background:rgba(255,255,255,0.12);
+border-radius:30px;
 
-    backdrop-filter:blur(18px);
+overflow:hidden;
 
-    border:1px solid rgba(255,255,255,0.2);
+border:1px solid rgba(255,255,255,0.08);
 
-    box-shadow:
-    0 10px 40px rgba(0,0,0,0.35);
+box-shadow:0 15px 40px rgba(0,0,0,0.5);
 
-    animation:floatCard 4s ease-in-out infinite;
+animation:fadeIn 1s ease;
+
 }
 
-@keyframes floatCard{
+@keyframes fadeIn{
 
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-8px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
+from{
+opacity:0;
+transform:translateY(30px);
 }
 
-.logo{
-
-    width:90px;
-
-    height:90px;
-
-    margin:auto;
-
-    margin-bottom:20px;
-
-    border-radius:50%;
-
-    background:linear-gradient(135deg,#3b82f6,#8b5cf6);
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    color:white;
-
-    font-size:36px;
-
-    font-weight:bold;
-
-    box-shadow:0 8px 25px rgba(59,130,246,0.5);
+to{
+opacity:1;
+transform:translateY(0);
 }
 
-h1{
-
-    text-align:center;
-
-    color:white;
-
-    font-size:40px;
-
-    margin-bottom:10px;
 }
 
-.subtitle{
+.left{
 
-    text-align:center;
+padding:70px;
+color:white;
 
-    color:#e2e8f0;
+display:flex;
+flex-direction:column;
+justify-content:center;
 
-    margin-bottom:35px;
-
-    font-size:15px;
 }
 
-.input-box{
+.left h1{
 
-    margin-bottom:18px;
+font-size:58px;
+line-height:1.2;
+margin-bottom:25px;
+
 }
 
-.input-box label{
+.left p{
 
-    display:block;
+font-size:18px;
+line-height:1.8;
+opacity:0.9;
 
-    color:white;
+margin-bottom:35px;
 
-    margin-bottom:8px;
-
-    font-size:14px;
-
-    font-weight:500;
 }
 
-.input-box input,
-.input-box select{
+.features{
 
-    width:100%;
+display:flex;
+flex-direction:column;
+gap:20px;
 
-    padding:17px;
-
-    border:none;
-
-    outline:none;
-
-    border-radius:16px;
-
-    background:rgba(255,255,255,0.15);
-
-    color:white;
-
-    font-size:15px;
-
-    transition:0.3s;
 }
 
-.input-box input::placeholder{
-    color:#dbeafe;
+.feature{
+
+display:flex;
+align-items:center;
+gap:15px;
+
+font-size:16px;
+
 }
 
-.input-box input:focus,
-.input-box select:focus{
+.feature span{
 
-    transform:scale(1.02);
+width:45px;
+height:45px;
 
-    background:rgba(255,255,255,0.22);
+border-radius:50%;
 
-    box-shadow:0 0 15px rgba(255,255,255,0.25);
+background:rgba(255,255,255,0.15);
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-size:20px;
+
 }
 
-select option{
-    color:black;
+.right{
+
+padding:60px;
+
+background:rgba(8,15,32,0.95);
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+
 }
 
-button{
+.portal-title{
 
-    width:100%;
+font-size:40px;
+font-weight:700;
 
-    padding:18px;
+margin-bottom:10px;
 
-    border:none;
+color:white;
 
-    border-radius:18px;
+text-align:center;
 
-    background:linear-gradient(
-    135deg,
-    #3b82f6,
-    #8b5cf6
-    );
-
-    color:white;
-
-    font-size:18px;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    transition:0.3s;
-
-    margin-top:10px;
-
-    box-shadow:0 8px 20px rgba(59,130,246,0.4);
 }
 
-button:hover{
+.portal-sub{
 
-    transform:translateY(-4px);
+text-align:center;
 
-    box-shadow:0 12px 28px rgba(59,130,246,0.6);
+color:#9fb5d1;
+
+margin-bottom:40px;
+
+line-height:1.7;
+
+}
+
+.action-btn{
+
+width:100%;
+
+padding:18px;
+
+margin-bottom:20px;
+
+border:none;
+
+border-radius:16px;
+
+font-size:17px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:0.3s;
+
+color:white;
+
+}
+
+.register-btn{
+
+background:linear-gradient(45deg,#00c6ff,#0072ff);
+
+}
+
+.student-btn{
+
+background:linear-gradient(45deg,#00b09b,#96c93d);
+
+}
+
+.coordinator-btn{
+
+background:linear-gradient(45deg,#ff512f,#dd2476);
+
+}
+
+.action-btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 12px 30px rgba(0,0,0,0.4);
+
+}
+
+.stats{
+
+margin-top:25px;
+
+display:grid;
+grid-template-columns:repeat(3,1fr);
+
+gap:15px;
+
+}
+
+.stat-card{
+
+background:rgba(255,255,255,0.06);
+
+padding:18px;
+
+border-radius:16px;
+
+text-align:center;
+
+}
+
+.stat-card h2{
+
+font-size:28px;
+color:#00c6ff;
+
+margin-bottom:8px;
+
+}
+
+.stat-card p{
+
+font-size:13px;
+color:#cdd9ea;
+
 }
 
 .footer{
 
-    text-align:center;
+margin-top:25px;
 
-    margin-top:25px;
+text-align:center;
 
-    color:#dbeafe;
+font-size:13px;
 
-    font-size:13px;
+color:#7f93ad;
+
 }
 
-.glow{
+@media(max-width:900px){
 
-    position:absolute;
-
-    width:250px;
-
-    height:250px;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,0.08);
-
-    filter:blur(40px);
-
-    z-index:-1;
+.container{
+grid-template-columns:1fr;
 }
 
-.glow1{
-    top:50px;
-    left:50px;
+.left{
+display:none;
 }
 
-.glow2{
-    bottom:50px;
-    right:50px;
+.right{
+padding:40px 25px;
 }
 
-@media(max-width:768px){
+.stats{
+grid-template-columns:1fr;
+}
 
-    body{
-        padding:15px;
-        align-items:flex-start;
-    }
-
-    .container{
-
-        margin-top:20px;
-
-        padding:25px;
-    }
-
-    h1{
-        font-size:30px;
-    }
-
-    .logo{
-
-        width:70px;
-        height:70px;
-        font-size:28px;
-    }
-
-    button{
-        padding:16px;
-    }
 }
 
 </style>
@@ -321,159 +304,103 @@ button:hover{
 
 <body>
 
-<div class="glow glow1"></div>
-<div class="glow glow2"></div>
-
 <div class="container">
 
-<div class="logo">
-🚀
-</div>
+<div class="left">
 
-<h1>Internship Registration</h1>
+<h1>
+🚀 Internship Management Portal
+</h1>
 
-<p class="subtitle">
-Build your future with our professional internship platform
+<p>
+Professional internship tracking system for Cloud Computing, DevOps, AI, Cyber Security, Web Development, Flutter and more.
 </p>
 
-<form id="studentForm">
+<div class="features">
 
-<div class="input-box">
-<label>First Name</label>
-<input type="text" id="firstName" placeholder="Enter First Name" required>
+<div class="feature">
+<span>📊</span>
+Live Attendance & Performance Tracking
 </div>
 
-<div class="input-box">
-<label>Last Name</label>
-<input type="text" id="lastName" placeholder="Enter Last Name" required>
+<div class="feature">
+<span>🧠</span>
+Domain Specific Coordinators
 </div>
 
-<div class="input-box">
-<label>Email Address</label>
-<input type="email" id="email" placeholder="Enter Email Address" required>
+<div class="feature">
+<span>📅</span>
+Task Submission & Review System
 </div>
 
-<div class="input-box">
-<label>Whatsapp Number</label>
-<input type="text" id="whatsapp" placeholder="Enter Whatsapp Number" required>
+<div class="feature">
+<span>🎓</span>
+Internship Certificate & Reports
 </div>
-
-<div class="input-box">
-
-<label>Select Domain</label>
-
-<select id="domain" required>
-
-<option value="">Choose Your Domain</option>
-
-<option>DevOps</option>
-<option>Cloud Computing</option>
-<option>Python Development</option>
-<option>Java Development</option>
-<option>Web Development</option>
-<option>MERN Stack</option>
-<option>Artificial Intelligence</option>
-<option>Data Science</option>
-<option>Cyber Security</option>
-<option>Software Engineering</option>
-<option>Flutter Development</option>
-<option>AWS Cloud</option>
-
-</select>
 
 </div>
 
-<div class="input-box">
-<label>Joining Date</label>
-<input type="date" id="joiningDate" required>
 </div>
 
-<div class="input-box">
-<label>Internship Tenure</label>
-<select id="tenure" required>
-<option value="">Select Tenure</option>
-<option value="1 Month">1 Month</option>
-<option value="3 Months">3 Months</option>
-<option value="6 Months">6 Months</option>
-</select>
+<div class="right">
+
+<div class="portal-title">
+Welcome Portal
 </div>
 
-<button type="submit">
-Register Now
+<div class="portal-sub">
+Access your internship workspace professionally
+</div>
+
+<button
+class="action-btn register-btn"
+onclick="window.location.href='register.html'"
+>
+🚀 Register Now
 </button>
 
-</form>
+<button
+class="action-btn student-btn"
+onclick="window.location.href='login.html'"
+>
+🎓 Student Login
+</button>
+
+<button
+class="action-btn coordinator-btn"
+onclick="window.location.href='coordinator-login.html'"
+>
+🛡 Coordinator Login
+</button>
+
+<div class="stats">
+
+<div class="stat-card">
+<h2>10+</h2>
+<p>Domains</p>
+</div>
+
+<div class="stat-card">
+<h2>500+</h2>
+<p>Interns</p>
+</div>
+
+<div class="stat-card">
+<h2>24/7</h2>
+<p>Tracking</p>
+</div>
+
+</div>
 
 <div class="footer">
-✨ Professional Internship Portal © 2026
+Internship Management System © 2026
 </div>
 
 </div>
 
-<script>
+</div>
 
-document.getElementById("studentForm")
-.addEventListener("submit", async function(e){
-
-    e.preventDefault();
-
-    const studentData = {
-
-        firstName:
-        document.getElementById("firstName").value,
-
-        lastName:
-        document.getElementById("lastName").value,
-
-        email:
-        document.getElementById("email").value,
-
-        whatsapp:
-        document.getElementById("whatsapp").value,
-
-        domain:
-        document.getElementById("domain").value,
-
-        joiningDate:
-        document.getElementById("joiningDate").value,
-
-        tenure:
-        document.getElementById("tenure").value
-    };
-
-    const response = await fetch("/register",{
-
-        method:"POST",
-
-        headers:{
-            "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify(studentData)
-    });
-
-    const result = await response.json();
-
-    if(result.already){
-
-window.location.href =
-`already.html?id=${result.employeeId}`;
-
-return;
-
-} 
-
-    document.getElementById("studentForm").reset();
-
-setTimeout(() => {
-
-window.location.href = "success.html";
-
-}, 800);
-
-});
-
-</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 </html>

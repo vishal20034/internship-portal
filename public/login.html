@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intern Login Portal</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:
+linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+overflow:hidden;
+}
+
+.login-container{
+width:420px;
+padding:40px;
+border-radius:25px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.1);
+box-shadow:0 8px 32px rgba(0,0,0,0.3);
+color:white;
+animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.logo{
+text-align:center;
+font-size:60px;
+margin-bottom:10px;
+}
+
+.title{
+text-align:center;
+font-size:32px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+font-size:14px;
+color:#ccc;
+margin-bottom:30px;
+}
+
+.input-box{
+margin-bottom:20px;
+}
+
+.input-box label{
+display:block;
+margin-bottom:8px;
+font-size:14px;
+}
+
+.input-box input{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:12px;
+background:rgba(255,255,255,0.12);
+color:white;
+font-size:15px;
+}
+
+.input-box input::placeholder{
+color:#ddd;
+}
+
+.login-btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:linear-gradient(45deg,#00c6ff,#0072ff);
+color:white;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+margin-top:10px;
+}
+
+.login-btn:hover{
+transform:scale(1.03);
+box-shadow:0 0 20px rgba(0,114,255,0.5);
+}
+
+.footer{
+margin-top:25px;
+text-align:center;
+font-size:13px;
+color:#ccc;
+}
+
+.loading{
+display:none;
+text-align:center;
+margin-top:15px;
+font-size:14px;
+color:#00ffd5;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+<div class="logo">🚀</div>
+
+<div class="title">
+Intern Portal
+</div>
+
+<div class="subtitle">
+Cloud • DevOps • AI • Cyber Security
+</div>
+
+<form id="loginForm">
+
+<div class="input-box">
+<label>Employee ID</label>
+<input 
+type="text" 
+id="employeeId" 
+placeholder="Enter Employee ID"
+required
+>
+</div>
+
+<div class="input-box">
+<label>Password</label>
+<input 
+type="password" 
+id="password" 
+placeholder="Enter Password"
+required
+>
+</div>
+
+<button class="login-btn" type="submit">
+Login To Dashboard
+</button>
+
+<div class="loading" id="loadingText">
+Logging in...
+</div>
+
+</form>
+
+<div class="footer">
+Tech Internship Management System
+</div>
+
+</div>
+
+<script>
+
+const form = document.getElementById("loginForm");
+
+form.addEventListener("submit", async (e)=>{
+
+e.preventDefault();
+
+document.getElementById("loadingText").style.display="block";
+
+const employeeId =
+document.getElementById("employeeId").value;
+
+const password =
+document.getElementById("password").value;
+
+try{
+
+const response = await fetch("/student-login",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+employeeId,
+password
+})
+});
+
+const data = await response.json();
+
+document.getElementById("loadingText").style.display="none";
+
+if(data.success){
+
+localStorage.setItem("student", JSON.stringify({
+name:data.student.name,
+employeeId:data.student.employeeId,
+domain:data.student.domain
+}));
+
+alert("Login Successful 🚀");
+
+window.location.href="student-dashboard.html";
+
+}else{
+
+alert(data.message || "Invalid Login");
+
+}
+
+}catch(error){
+
+document.getElementById("loadingText").style.display="none";
+
+console.log(error);
+
+alert("Server Error");
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
