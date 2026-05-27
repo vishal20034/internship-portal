@@ -186,6 +186,8 @@ const newStudent = new Student({
 firstName,
 lastName,
 
+name: firstName + " " + lastName,
+
 domain,
 
 whatsapp,
@@ -780,13 +782,13 @@ message:"Invalid Employee ID or Password"
 }
 
 res.json({
-success:true,
-student:{
-name:student.name,
-employeeId:student.employeeId,
-domain:student.domain
-}
-});
+ success:true,
+ student:{
+   name: student.firstName + " " + student.lastName,
+   employeeId: student.employeeId,
+   domain: student.domain
+ }
+})
 
 }catch(error){
 

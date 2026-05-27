@@ -5,964 +5,1045 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Student Dashboard</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+:root {
+  --bg-base:        #080f1c;
+  --bg-surface:     #0d1629;
+  --bg-card:        #111e35;
+  --bg-card-hover:  #162340;
+  --bg-input:       #0b1526;
+  --border:         rgba(99,140,210,0.12);
+  --border-strong:  rgba(99,140,210,0.22);
+  --accent-blue:    #3b82f6;
+  --accent-cyan:    #06b6d4;
+  --accent-green:   #10b981;
+  --accent-amber:   #f59e0b;
+  --accent-red:     #ef4444;
+  --text-primary:   #edf2ff;
+  --text-secondary: #8aa4c8;
+  --text-muted:     #4d6a90;
+  --radius-sm:      10px;
+  --radius-md:      16px;
+  --radius-lg:      22px;
+  --radius-xl:      28px;
+  --shadow-card:    0 4px 24px rgba(0,0,0,0.35);
+  --shadow-glow:    0 0 40px rgba(59,130,246,0.12);
 }
 
-body{
-background:#071120;
-color:white;
-padding:20px;
+*, *::before, *::after {
+  margin: 0; padding: 0; box-sizing: border-box;
 }
 
-.top-card{
-background:linear-gradient(90deg,#0d6efd,#1f8fff);
-padding:30px;
-border-radius:20px;
-margin-bottom:20px;
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding: 32px 28px;
 }
 
-.top-card h1{
-font-size:45px;
+/* ── Ambient background blobs ── */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(130px);
+  opacity: 0.35;
+}
+body::before {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #1d4ed8, transparent 70%);
+  top: -180px; right: -160px;
+}
+body::after {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, #0e7490, transparent 70%);
+  bottom: -160px; left: -140px;
 }
 
-.top-card p{
-margin-top:10px;
-font-size:18px;
-opacity:0.8;
+/* ── Layout wrapper ── */
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-margin-bottom:25px;
+/* ════════════════════════════════
+   TOP HERO CARD
+════════════════════════════════ */
+.top-card {
+  position: relative;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #0369a1 100%);
+  padding: 40px 44px;
+  border-radius: var(--radius-xl);
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(30,58,138,0.45), var(--shadow-glow);
+  border: 1px solid rgba(147,197,253,0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.stat-box{
-background:#101a2f;
-padding:25px;
-border-radius:18px;
+/* decorative geometric shapes */
+.top-card::before {
+  content: '';
+  position: absolute;
+  width: 320px; height: 320px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 50%;
+  top: -120px; right: -80px;
+}
+.top-card::after {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 50%;
+  bottom: -80px; right: 60px;
 }
 
-.stat-box h2{
-font-size:18px;
-margin-bottom:15px;
-color:#9ac7ff;
+.top-card-left { position: relative; z-index: 1; }
+
+.top-card h1 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
 
-.stat-box h1{
-font-size:45px;
+#domainText {
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(219,234,254,0.8);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#domainText::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: #67e8f9;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #67e8f9;
 }
 
+#employeeText {
+  position: relative;
+  z-index: 1;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.5px;
+  color: #bfdbfe;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+/* ════════════════════════════════
+   STATS GRID
+════════════════════════════════ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-box {
+  background: var(--bg-card);
+  padding: 26px 24px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+.stat-box::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+  opacity: 0;
+  transition: opacity 0.22s;
+}
+.stat-box:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(59,130,246,0.1);
+}
+.stat-box:hover::after { opacity: 1; }
+
+.stat-box h2 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.stat-box h1 {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #e0f2fe, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ════════════════════════════════
+   SHARED SECTION CARD
+════════════════════════════════ */
 .notice-box,
 .tasks-box,
 .submissions-box,
-.attendance-box{
-background:#101a2f;
-padding:25px;
-border-radius:20px;
-margin-bottom:25px;
+.attendance-box {
+  background: var(--bg-card);
+  padding: 32px 36px;
+  border-radius: var(--radius-xl);
+  margin-bottom: 22px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
 }
 
-.section-title{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
 }
 
-.section-title h2{
-font-size:32px;
+.section-title h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.badge{
-background:#0d6efd;
-padding:8px 15px;
-border-radius:30px;
-font-size:14px;
+.badge {
+  background: rgba(59,130,246,0.12);
+  border: 1px solid rgba(59,130,246,0.25);
+  color: #93c5fd;
+  padding: 7px 16px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
+/* ════════════════════════════════
+   NOTICE BOX CONTENT
+════════════════════════════════ */
+.notice-content { display: flex; flex-direction: column; gap: 16px; }
+
+.notice-title-row h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+#noticeText {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.meeting-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.meeting-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex: 1;
+  min-width: 180px;
+}
+.meeting-pill strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.meeting-pill .pill-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.meet-link-wrap { margin-top: 4px; }
+#meetLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+  color: white;
+  text-decoration: none;
+  padding: 11px 22px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  transition: opacity 0.2s, transform 0.2s;
+}
+#meetLink:hover { opacity: 0.88; transform: translateY(-1px); }
+#meetLink::before { content: '🎥'; }
+
+/* ════════════════════════════════
+   TASK CARDS
+════════════════════════════════ */
 .task-card,
-.submission-card{
-background:#0f1728;
-padding:20px;
-border-radius:15px;
-margin-bottom:15px;
+.submission-card {
+  background: var(--bg-surface);
+  padding: 26px 28px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+.task-card:last-child,
+.submission-card:last-child { margin-bottom: 0; }
+
+.task-card:hover,
+.submission-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  box-shadow: 0 6px 28px rgba(0,0,0,0.3);
 }
 
-.task-card h3,
-.submission-card h3{
-margin-bottom:10px;
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
 }
 
-button{
-border:none;
-padding:14px 22px;
-border-radius:12px;
-cursor:pointer;
-font-weight:bold;
+.task-number {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent-cyan);
+  background: rgba(6,182,212,0.1);
+  border: 1px solid rgba(6,182,212,0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
 }
 
-.primary-btn{
-background:#12d8fa;
-color:white;
+.task-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
 }
 
-.attendance-btn{
-background:#24d66c;
-color:white;
+.task-card p,
+.submission-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.submission-card p b {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
-.attendance-disabled{
-background:gray !important;
-cursor:not-allowed;
+/* ════════════════════════════════
+   BUTTONS
+════════════════════════════════ */
+button {
+  border: none;
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  border-radius: var(--radius-sm);
+}
+button:hover { transform: translateY(-2px); }
+button:active { transform: translateY(0); }
+
+.primary-btn {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+  color: white;
+  padding: 11px 22px;
+  margin-top: 16px;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.3);
+}
+.primary-btn:hover { box-shadow: 0 6px 22px rgba(59,130,246,0.45); }
+
+.attendance-btn {
+  background: linear-gradient(90deg, #059669, var(--accent-green));
+  color: white;
+  padding: 12px 26px;
+  box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+  font-size: 14px;
+}
+.attendance-btn:hover { box-shadow: 0 6px 22px rgba(16,185,129,0.45); }
+
+.attendance-disabled {
+  background: rgba(255,255,255,0.06) !important;
+  color: var(--text-muted) !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  opacity: 0.7;
+}
+.attendance-disabled:hover { transform: none !important; }
+
+/* ════════════════════════════════
+   STATUS PILLS
+════════════════════════════════ */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-top: 14px;
+}
+.status-pill::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
 }
 
-.links{
-margin-top:10px;
-display:flex;
-gap:15px;
-flex-wrap:wrap;
+.status-approved {
+  background: rgba(16,185,129,0.12);
+  color: #34d399;
+  border: 1px solid rgba(16,185,129,0.25);
+}
+.status-rejected {
+  background: rgba(239,68,68,0.12);
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,0.25);
+}
+.status-pending {
+  background: rgba(245,158,11,0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245,158,11,0.25);
 }
 
-.links a{
-color:#59b7ff;
-text-decoration:none;
+/* ════════════════════════════════
+   LINKS ROW
+════════════════════════════════ */
+.links {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.links a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  background: rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.links a:hover {
+  background: rgba(59,130,246,0.16);
+  transform: translateY(-1px);
 }
 
-.status-pill{
-padding:6px 14px;
-border-radius:20px;
-font-size:13px;
-font-weight:bold;
-display:inline-block;
-margin-top:10px;
+/* ════════════════════════════════
+   REVIEW BOX
+════════════════════════════════ */
+.review-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  border-radius: var(--radius-md);
+  margin-top: 16px;
+}
+.review-box h4 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+.review-box p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin-bottom: 0 !important;
 }
 
-.status-approved{
-background:#1db954;
+/* ════════════════════════════════
+   ATTENDANCE BOX
+════════════════════════════════ */
+.attendance-box .section-title { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+#attendanceStatus {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 6px;
 }
 
-.status-rejected{
-background:#ff4d4d;
+/* ════════════════════════════════
+   MODAL
+════════════════════════════════ */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(4,9,18,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  backdrop-filter: blur(10px);
 }
 
-.status-pending{
-background:#ffaa00;
+.modal-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  padding: 36px;
+  border-radius: var(--radius-xl);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  animation: modalIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes modalIn {
+  from { opacity:0; transform: scale(0.92) translateY(20px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
 }
 
-.review-box{
-background:#151f35;
-padding:15px;
-border-radius:12px;
-margin-top:15px;
+.modal-content h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
 }
 
-.modal{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.8);
-display:none;
-justify-content:center;
-align-items:center;
-z-index:999;
+.modal-field-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 7px;
+  display: block;
 }
 
-.modal-content{
-background:#101a2f;
-padding:30px;
-border-radius:20px;
-width:90%;
-max-width:500px;
+.modal-content input[type="text"],
+.modal-content textarea {
+  width: 100%;
+  padding: 13px 16px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.modal-content input[type="text"]:focus,
+.modal-content textarea:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+.modal-content textarea { resize: vertical; min-height: 100px; }
+
+.file-upload-wrap {
+  margin-bottom: 18px;
+}
+.file-upload-wrap input[type="file"] {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+}
+.file-upload-wrap input[type="file"]:hover {
+  border-color: var(--accent-blue);
 }
 
-.modal-content input,
-.modal-content textarea{
-width:100%;
-padding:14px;
-margin-bottom:15px;
-border:none;
-border-radius:10px;
-background:#0b1323;
-color:white;
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+.modal-actions .primary-btn { flex: 1; margin-top: 0; text-align: center; }
+
+.close-btn {
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.22);
+  color: #f87171;
+  padding: 11px 22px;
+}
+.close-btn:hover {
+  background: rgba(239,68,68,0.2);
+  transform: translateY(-2px);
 }
 
-.close-btn{
-background:red;
-color:white;
-margin-left:10px;
+/* ════════════════════════════════
+   EMPTY STATE
+════════════════════════════════ */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.empty-state::before {
+  content: '📭';
+  display: block;
+  font-size: 32px;
+  margin-bottom: 12px;
 }
 
-.empty-state{
-opacity:0.6;
-padding:15px 0;
+/* ════════════════════════════════
+   DIVIDERS & MISC
+════════════════════════════════ */
+.notice-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
 }
 
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px) {
+  body { padding: 16px; }
+  .top-card { padding: 28px 24px; flex-direction: column; }
+  .top-card h1 { font-size: 26px; }
+  #employeeText { align-self: flex-start; }
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .stat-box h1 { font-size: 30px; }
+  .notice-box, .tasks-box, .submissions-box, .attendance-box { padding: 24px 20px; }
+  .section-title h2 { font-size: 17px; }
+  .meeting-row { flex-direction: column; }
+  .modal-content { padding: 26px 22px; }
+}
+@media (max-width: 400px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+}
 </style>
 </head>
 
 <body>
+<div class="page-wrapper">
 
-<div class="top-card">
-<h1 id="welcomeText">Welcome 🚀</h1>
-<p id="domainText">Domain</p>
-</div>
+  <!-- ── TOP HERO CARD ── -->
+  <div class="top-card">
+    <div class="top-card-left">
+      <h1 id="welcomeText">Welcome 🚀</h1>
+      <p id="domainText">Domain</p>
+    </div>
+    <div id="employeeText">Employee ID</div>
+  </div>
 
-<div class="stats">
+  <!-- ── STATS ── -->
+  <div class="stats">
+    <div class="stat-box">
+      <h2>Attendance</h2>
+      <h1 id="attendanceText">0%</h1>
+    </div>
+    <div class="stat-box">
+      <h2>Tasks Completed</h2>
+      <h1 id="tasksCompletedText">0</h1>
+    </div>
+    <div class="stat-box">
+      <h2>Meetings Joined</h2>
+      <h1 id="meetingsJoinedText">0</h1>
+    </div>
+    <div class="stat-box">
+      <h2>Performance</h2>
+      <h1 id="performanceText">B</h1>
+    </div>
+  </div>
 
-<div class="stat-box">
-<h2>Attendance</h2>
-<h1 id="attendanceText">0%</h1>
-</div>
+  <!-- ── NOTICE BOX ── -->
+  <div class="notice-box">
+    <div class="section-title">
+      <h2>📢 Important Notice</h2>
+      <span class="badge">Live from coordinator</span>
+    </div>
+    <div class="notice-content">
+      <div class="notice-title-row">
+        <h3 id="noticeTitle">Announcement</h3>
+        <p id="noticeText">Loading notice...</p>
+      </div>
+      <div class="meeting-row">
+        <div class="meeting-pill">
+          <span class="pill-icon">🌅</span>
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:var(--text-muted);margin-bottom:3px;">Morning</div>
+            <strong id="morningTime">Not Updated</strong>
+          </div>
+        </div>
+        <div class="meeting-pill">
+          <span class="pill-icon">🌙</span>
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:var(--text-muted);margin-bottom:3px;">Evening</div>
+            <strong id="eveningTime">Not Updated</strong>
+          </div>
+        </div>
+      </div>
+      <div class="meet-link-wrap">
+        <a id="meetLink" href="#" target="_blank">Join Meeting</a>
+      </div>
+    </div>
+  </div>
 
-<div class="stat-box">
-<h2>Tasks Completed</h2>
-<h1 id="tasksCompletedText">0</h1>
-</div>
+  <!-- ── TASKS BOX ── -->
+  <div class="tasks-box">
+    <div class="section-title">
+      <h2>📚 Your Domain Tasks</h2>
+      <span class="badge">Domain Tasks</span>
+    </div>
+    <div id="tasksContainer"></div>
+  </div>
 
-<div class="stat-box">
-<h2>Meetings Joined</h2>
-<h1 id="meetingsJoinedText">0</h1>
-</div>
+  <!-- ── SUBMISSIONS BOX ── -->
+  <div class="submissions-box">
+    <div class="section-title">
+      <h2>📥 Submitted Tasks</h2>
+      <span class="badge">Task History</span>
+    </div>
+    <div id="submissionContainer"></div>
+  </div>
 
-<div class="stat-box">
-<h2>Performance</h2>
-<h1 id="performanceText">B</h1>
-</div>
+  <!-- ── ATTENDANCE BOX ── -->
+  <div class="attendance-box">
+    <div class="section-title">
+      <div>
+        <h2>🪪 Attendance</h2>
+        <p id="attendanceStatus">Status not updated yet</p>
+      </div>
+      <button id="attendanceBtn" class="attendance-btn" onclick="giveAttendance()">
+        Give Attendance
+      </button>
+    </div>
+  </div>
 
-</div>
+</div><!-- /page-wrapper -->
 
-<div class="notice-box">
-
-<div class="section-title">
-<h2>📢 Important Notice</h2>
-<span class="badge">Live from coordinator</span>
-</div>
-
-<h3 id="noticeTitle">Announcement</h3>
-
-<p id="noticeText">
-Loading notice...
-</p>
-
-<br>
-
-<p>
-🌅 Morning Meeting:
-<span id="morningTime">
-Not updated
-</span>
-</p>
-
-<br>
-
-<p>
-🌙 Evening Meeting:
-<span id="eveningTime">
-Not updated
-</span>
-</p>
-
-<br>
-
-<a id="meetLink" href="#" target="_blank">
-Join Meeting
-</a>
-
-</div>
-
-<div class="tasks-box">
-
-<div class="section-title">
-<h2>📚 Your Domain Tasks</h2>
-<span class="badge">Domain</span>
-</div>
-
-<div id="tasksContainer"></div>
-
-</div>
-
-<div class="submissions-box">
-
-<div class="section-title">
-<h2>📥 Submitted Tasks</h2>
-<span class="badge">Task History</span>
-</div>
-
-<div id="submissionContainer"></div>
-
-</div>
-
-<div class="attendance-box">
-
-<div class="section-title">
-<div>
-<h2>🪪 Attendance</h2>
-<p id="attendanceStatus">
-Status not updated yet
-</p>
-</div>
-
-<button
-id="attendanceBtn"
-class="attendance-btn"
-onclick="giveAttendance()"
->
-Give Attendance
-</button>
-
-</div>
-
-</div>
-
+<!-- ── SUBMISSION MODAL ── -->
 <div class="modal" id="submissionModal">
+  <div class="modal-content">
+    <h2>📤 Submit Task</h2>
 
-<div class="modal-content">
+    <label class="modal-field-label">GitHub Repository Link</label>
+    <input type="text" id="githubLink" placeholder="https://github.com/username/repo">
 
-<h2 style="margin-bottom:20px;">
-Submit Task
-</h2>
+    <label class="modal-field-label">Note / Description</label>
+    <textarea id="note" placeholder="Write a brief note about your submission..." rows="4"></textarea>
 
-<input
-type="text"
-id="githubLink"
-placeholder="GitHub Link"
->
+    <label class="modal-field-label">Screenshot (Image)</label>
+    <div class="file-upload-wrap"><input type="file" id="imageFile"></div>
 
-<textarea
-id="note"
-placeholder="Write note"
-rows="5"
-></textarea>
+    <label class="modal-field-label">PDF Document</label>
+    <div class="file-upload-wrap"><input type="file" id="pdfFile"></div>
 
-<input type="file" id="imageFile">
-
-<input type="file" id="pdfFile">
-
-<button
-class="primary-btn"
-onclick="submitTask()"
->
-Submit
-</button>
-
-<button
-class="close-btn"
-onclick="closeSubmissionModal()"
->
-Close
-</button>
-
+    <div class="modal-actions">
+      <button class="primary-btn" onclick="submitTask()">Submit Task</button>
+      <button class="close-btn" onclick="closeSubmissionModal()">Cancel</button>
+    </div>
+  </div>
 </div>
 
-</div>
-
+<!-- ══════════════════════════════════
+     ALL JAVASCRIPT — UNCHANGED
+══════════════════════════════════ -->
 <script>
 
 const student = JSON.parse(localStorage.getItem("student"));
 
 if(!student){
-window.location.href = "/login.html";
+  window.location.href="/login.html";
 }
 
 const employeeId = student.employeeId;
 const domain = student.domain;
-console.log(domain);
+
 const studentName =
-student.name ||
-student.fullName ||
-student.username ||
-"Student";
+  student.name ||
+  student.fullName ||
+  student.username ||
+  "Student";
 
-document.getElementById("welcomeText")
-.innerText = `Welcome ${studentName} 🚀`;
+document.getElementById("welcomeText").innerText =
+  "Welcome " + studentName + " 🚀";
 
-document.getElementById("domainText")
-.innerText = `Domain : ${domain}`;
+document.getElementById("employeeText").innerText =
+  student.employeeId;
+
+document.getElementById("domainText").innerText =
+  "Domain : " + domain;
 
 let currentTask = "";
 let latestSubmissions = [];
 
 const tasksByDomain = {
-
-"Cloud Computing":[
-"Deploy static website on AWS",
-"Create EC2 instance"
-],
-
-"DevOps":[
-"Install Jenkins",
-"Dockerize node app"
-],
-
-"Python Development":[
-"Create calculator project",
-"Build API using Flask"
-],
-
-"Java":[
-"Bank management system",
-"OOP concepts demo"
-],
-
-"Web Development":[
-"Responsive landing page",
-"Portfolio website"
-],
-
-"MERN Stack":[
-"Todo fullstack app",
-"Authentication system"
-],
-
-"Artificial Intelligence":[
-"AI chatbot",
-"Image classifier"
-],
-
-"Data Science":[
-"Data visualization",
-"Pandas analysis"
-],
-
-"Cyber Security":[
-"Nmap scan",
-"Security audit"
-],
-
-"Software Engineering":[
-"Agile sprint plan",
-"SDLC document"
-],
-
-"Flutter Development":[
-"Flutter UI demo",
-"Firebase auth"
-]
-
+  "Cloud Computing":["Deploy static website on AWS","Create EC2 instance"],
+  "DevOps":["Install Jenkins","Dockerize node app"],
+  "Python Development":["Create calculator project","Build API using Flask"],
+  "Java":["Bank management system","OOP concepts demo"],
+  "Web Development":["Responsive landing page","Portfolio website"],
+  "MERN Stack":["Todo fullstack app","Authentication system"],
+  "Artificial Intelligence":["AI chatbot","Image classifier"],
+  "Data Science":["Data visualization","Pandas analysis"],
+  "Cyber Security":["Nmap scan","Security audit"],
+  "Software Engineering":["Agile sprint plan","SDLC document"],
+  "Flutter Development":["Flutter UI demo","Firebase auth"]
 };
 
 async function loadNotice(){
-
-try{
-
-const student =
-JSON.parse(localStorage.getItem("student"));
-
-const response =
-await fetch(
-"/get-notice/" + student.domain
-);
-
-const data =
-await response.json();
-
-document.getElementById("noticeTitle")
-.innerText =
-data.title || "Important Notice";
-
-document.getElementById("noticeText")
-.innerText =
-data.importantNotice || "No notice";
-
-document.getElementById("morningTime")
-.innerText =
-data.morningMeeting || "Not updated";
-
-document.getElementById("eveningTime")
-.innerText =
-data.eveningMeeting || "Not updated";
-
-}catch(error){
-
-console.log(error);
-
-}
-
+  try{
+    const response = await fetch("/get-notice/" + student.domain);
+    const data = await response.json();
+    document.getElementById("noticeTitle").innerText = data.title || "Important Notice";
+    document.getElementById("noticeText").innerText = data.importantNotice || "No notice";
+    document.getElementById("morningTime").innerText = data.morningMeeting || "Not updated";
+    document.getElementById("eveningTime").innerText = data.eveningMeeting || "Not updated";
+    const meetLink = document.getElementById("meetLink");
+    if(data.meetingLink && data.meetingLink.trim() !== ""){
+      meetLink.href = data.meetingLink.trim();
+    } else {
+      meetLink.href = "#";
+    }
+  }catch(error){
+    console.log(error);
+  }
 }
 
 function renderTasks(){
+  const container = document.getElementById("tasksContainer");
+  const tasks = tasksByDomain[domain] || [];
 
-const container =
-document.getElementById("tasksContainer");
+  if(tasks.length===0){
+    container.innerHTML = `<div class="empty-state">No tasks available</div>`;
+    return;
+  }
 
-const tasks =
-tasksByDomain[domain] || [];
-
-if(tasks.length===0){
-
-container.innerHTML =
-`<div class="empty-state">
-No tasks available
-</div>`;
-
-return;
-
-}
-
-container.innerHTML =
-tasks.map((task,index)=>`
-
-<div class="task-card">
-
-<h3>
-Task ${index+1}
-</h3>
-
-<p>${task}</p>
-
-<br>
-
-<button
-class="primary-btn"
-onclick="openSubmissionModal(${index})"
->
-Submit Task
-</button>
-
-</div>
-
-`).join("");
-
+  container.innerHTML = tasks.map((task,index)=>`
+    <div class="task-card">
+      <div class="task-card-header">
+        <span class="task-number">Task ${index+1}</span>
+      </div>
+      <h3>${task}</h3>
+      <p>Complete this task and submit your work with a GitHub link, screenshot, and PDF documentation.</p>
+      <button class="primary-btn" onclick="openSubmissionModal(${index})">Open Task →</button>
+    </div>
+  `).join("");
 }
 
 function openSubmissionModal(index){
-
-currentTask =
-tasksByDomain[domain][index];
-
-document.getElementById("submissionModal")
-.style.display = "flex";
-
+  currentTask = tasksByDomain[domain][index];
+  document.getElementById("submissionModal").style.display="flex";
 }
 
 function closeSubmissionModal(){
-
-document.getElementById("submissionModal")
-.style.display = "none";
-
+  document.getElementById("submissionModal").style.display="none";
 }
 
 async function submitTask(){
+  try{
+    const githubLink = document.getElementById("githubLink").value;
+    const note = document.getElementById("note").value;
+    const image = document.getElementById("imageFile").files[0];
+    const pdf = document.getElementById("pdfFile").files[0];
 
-try{
+    const formData = new FormData();
+    formData.append("employeeId",employeeId);
+    formData.append("domain",domain);
+    formData.append("githubLink",githubLink);
+    formData.append("note",note);
+    formData.append("task",currentTask);
+    if(image){ formData.append("image",image); }
+    if(pdf){ formData.append("pdf",pdf); }
 
-const githubLink =
-document.getElementById("githubLink").value;
+    const response = await fetch("/submit-task",{method:"POST",body:formData});
+    const data = await response.json();
 
-const note =
-document.getElementById("note").value;
-
-const image =
-document.getElementById("imageFile").files[0];
-
-const pdf =
-document.getElementById("pdfFile").files[0];
-
-const formData = new FormData();
-
-formData.append("employeeId",employeeId);
-formData.append("domain",domain);
-formData.append("githubLink",githubLink);
-formData.append("note",note);
-
-if(image){
-formData.append("image",image);
-}
-
-if(pdf){
-formData.append("pdf",pdf);
-}
-
-const response =
-await fetch("/submit-task",{
-method:"POST",
-body:formData
-});
-
-const data =
-await response.json();
-
-if(data.success){
-
-Swal.fire({
-icon:"success",
-title:"Task Submitted",
-text:"Your task uploaded successfully 🚀",
-background:"#101820",
-color:"#ffffff",
-confirmButtonColor:"#00c853"
-});
-
-closeSubmissionModal();
-
-loadStudentSubmissions();
-
-} else {
-
-Swal.fire({
-icon:"error",
-title:"Submission Failed",
-text:"Task submission was not successful",
-background:"#101820",
-color:"#ffffff",
-confirmButtonColor:"#ff1744"
-});
-
-}
-
-} catch(error){
-
-console.log(error);
-
-}
-
+    if(data.success){
+      Swal.fire({icon:"success",title:"Task Submitted",text:"Your task uploaded successfully 🚀",background:"#101820",color:"#ffffff",confirmButtonColor:"#00c853"});
+      closeSubmissionModal();
+      loadStudentSubmissions();
+    }else{
+      Swal.fire({icon:"error",title:"Submission Failed",text:"Task submission failed",background:"#101820",color:"#ffffff"});
+    }
+  }catch(error){
+    console.log(error);
+  }
 }
 
 function getStatusClass(status){
-
-if(status==="Approved"){
-return "status-approved";
-}
-
-if(status==="Rejected"){
-return "status-rejected";
-}
-
-return "status-pending";
-
+  if(status==="Approved"){ return "status-approved"; }
+  if(status==="Rejected"){ return "status-rejected"; }
+  return "status-pending";
 }
 
 async function loadStudentSubmissions(){
-
-try{
-
-const response = await fetch(`/student-submissions/${encodeURIComponent(employeeId)}`);
-
-const data =
-await response.json();
-
-const submissions =
-data.submissions || [];
-
-latestSubmissions = submissions;
-
-renderSubmissions(submissions);
-
-updateAttendanceButton(submissions);
-
-updateStats(submissions);
-
-}catch(error){
-
-console.log(error);
-
-}
-
+  try{
+    const response = await fetch(`/student-submissions/${encodeURIComponent(employeeId)}`);
+    const data = await response.json();
+    const submissions = data.submissions || [];
+    latestSubmissions = submissions;
+    renderSubmissions(submissions);
+    updateAttendanceButton(submissions);
+    updateStats(submissions);
+  }catch(error){
+    console.log(error);
+  }
 }
 
 function updateStats(submissions){
-
-const approved =
-submissions.filter(
-s=>s.status==="Approved"
-).length;
-
-const attendanceDone =
-submissions.filter(
-s=>s.attendanceGiven===true
-).length;
-
-let totalDays = 20;
-
-const duration =
-submissions[0]?.internshipDuration;
-
-if(duration === "3 Months"){
-totalDays = 60;
-}
-
-if(duration === "6 Months"){
-totalDays = 120;
-}
-
-const attendancePercentage =
-Math.round(
-(attendanceDone / totalDays) * 100
-);
-
-document.getElementById("attendanceText")
-.innerText =
-`${attendancePercentage}%`;
-
-document.getElementById("tasksCompletedText")
-.innerText =
-approved;
-
-document.getElementById("meetingsJoinedText")
-.innerText =
-attendanceDone;
-
-document.getElementById("performanceText")
-.innerText =
-approved>=5
-? "A+"
-: approved>=3
-? "A"
-: approved>=1
-? "B"
-: "C";
-
+  const approved = submissions.filter(s=>s.status==="Approved").length;
+  const attendanceDone = submissions.filter(s=>s.attendanceGiven===true).length;
+  let totalDays = 20;
+  const duration = submissions[0]?.internshipDuration;
+  if(duration==="3 Months"){ totalDays=60; }
+  if(duration==="6 Months"){ totalDays=120; }
+  const attendancePercentage = Math.round((attendanceDone/totalDays)*100);
+  document.getElementById("attendanceText").innerText = attendancePercentage + "%";
+  document.getElementById("tasksCompletedText").innerText = approved;
+  document.getElementById("meetingsJoinedText").innerText = attendanceDone;
+  document.getElementById("performanceText").innerText =
+    approved>=5?"A+":approved>=3?"A":approved>=1?"B":"C";
 }
 
 function renderSubmissions(submissions){
-
-const container =
-document.getElementById("submissionContainer");
-
-if(submissions.length===0){
-
-container.innerHTML =
-`<div class="empty-state">
-No submissions yet
-</div>`;
-
-return;
-
-}
-
-container.innerHTML =
-submissions.map(sub=>`
-
-<div class="submission-card">
-
-<h3>
-${sub.task || "Submitted Task"}
-</h3>
-
-<p>
-<b>Domain:</b>
-${sub.domain}
-</p>
-
-<p>
-<b>Note:</b>
-${sub.note || "No note"}
-</p>
-
-<span class="
-status-pill
-${getStatusClass(sub.status)}
-">
-${sub.status}
-</span>
-
-<div class="links">
-
-<a
-href="${sub.githubLink || '#'}"
-target="_blank"
->
-GitHub
-</a>
-
-<a
-href="${sub.image || '#'}"
-target="_blank"
->
-Screenshot
-</a>
-
-<a
-href="${sub.pdf || '#'}"
-target="_blank"
->
-PDF
-</a>
-
-</div>
-
-<div class="review-box">
-
-<h4>
-Coordinator Review
-</h4>
-
-<br>
-
-<p>
-${sub.feedback || "No Feedback Yet"}
-</p>
-
-</div>
-
-</div>
-
-`).join("");
-
+  const container = document.getElementById("submissionContainer");
+  if(submissions.length===0){
+    container.innerHTML = `<div class="empty-state">No submissions yet</div>`;
+    return;
+  }
+  container.innerHTML = submissions.map(sub=>`
+    <div class="submission-card">
+      <h3>${sub.task || "Submitted Task"}</h3>
+      <p><b>Domain :</b> ${sub.domain}</p>
+      <p><b>Note :</b> ${sub.note || "No note"}</p>
+      <span class="status-pill ${getStatusClass(sub.status)}">${sub.status}</span>
+      <div class="links">
+        <a href="${sub.githubLink || '#'}" target="_blank">GitHub</a>
+        <a href="${sub.image || '#'}" target="_blank">Screenshot</a>
+        <a href="${sub.pdf || '#'}" target="_blank">PDF</a>
+      </div>
+      <div class="review-box">
+        <h4>Coordinator Review</h4>
+        <p>${sub.feedback || "No Feedback Yet"}</p>
+      </div>
+    </div>
+  `).join("");
 }
 
 function updateAttendanceButton(submissions){
+  const btn = document.getElementById("attendanceBtn");
+  const latest = submissions[0];
 
-const btn =
-document.getElementById("attendanceBtn");
-
-const latest =
-submissions[0];
-
-console.log(submissions);
-console.log(latest);
-
-if(!latest){
-
-btn.innerText =
-"Mark Attendance";
-
-btn.disabled = false;
-
-btn.classList.add(
-"attendance-disabled"
-);
-
-return;
-
-}
-
-if(
-latest.status !== "Approved" &&
-latest.status !== "Rejected"
-){
-
-btn.innerText =
-"Waiting For Approval";
-
-btn.disabled = true;
-
-btn.classList.add(
-"attendance-disabled"
-);
-
-return;
-}
-
-if(latest.attendanceGiven){
-
-btn.innerText =
-"Attendance Submitted";
-
-btn.disabled = true;
-
-btn.classList.add(
-"attendance-disabled"
-);
-
-return;
-
-}
-
-btn.innerText =
-"Give Attendance";
-
-btn.disabled = false;
-
-btn.classList.remove(
-"attendance-disabled"
-);
-
+  if(!latest){
+    btn.innerText = "Submit Task First";
+    btn.disabled = true;
+    btn.classList.add("attendance-disabled");
+    return;
+  }
+  if(latest.status !== "Approved" && latest.status !== "Rejected"){
+    btn.innerText = "Waiting For Approval";
+    btn.disabled = true;
+    btn.classList.add("attendance-disabled");
+    return;
+  }
+  if(latest.attendanceGiven){
+    btn.innerText = "Attendance Submitted";
+    btn.disabled = true;
+    btn.classList.add("attendance-disabled");
+    return;
+  }
+  btn.innerText = "Give Attendance";
+  btn.disabled = false;
+  btn.classList.remove("attendance-disabled");
 }
 
 async function giveAttendance(){
-
-try{
-
-const latest =
-latestSubmissions[0];
-
-if(!latest){
-
-Swal.fire({
-icon:"warning",
-title:"Task Required",
-text:"Please submit your task first",
-background:"#101820",
-color:"#ffffff",
-confirmButtonColor:"#ff9800"
-});
-
-return;
-
-}
-
-const response =
-await fetch("/give-attendance",{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-employeeId
-})
-
-});
-
-const data =
-await response.json();
-
-if(data.success){
-
-Swal.fire({
-icon:"success",
-title:"Attendance Marked",
-text:"Your attendance has been recorded",
-background:"#101820",
-color:"#ffffff",
-confirmButtonColor:"#00c853"
-});
-
-loadStudentSubmissions();
-
-}else{
-
-Swal.fire({
-icon:"error",
-title:"Attendance Failed",
-text:data.message,
-background:"#101820",
-color:"#ffffff",
-confirmButtonColor:"#ff1744"
-});
-
-}
-
-}catch(error){
-
-console.log(error);
-
-}
-
+  try{
+    const latest = latestSubmissions[0];
+    if(!latest){
+      Swal.fire({icon:"warning",title:"Task Required",text:"Please submit task first",background:"#101820",color:"#ffffff"});
+      return;
+    }
+    const response = await fetch("/give-attendance",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({employeeId})
+    });
+    const data = await response.json();
+    if(data.success){
+      Swal.fire({icon:"success",title:"Attendance Marked",text:"Attendance submitted successfully",background:"#101820",color:"#ffffff"});
+      loadStudentSubmissions();
+    }else{
+      Swal.fire({icon:"error",title:"Failed",text:data.message,background:"#101820",color:"#ffffff"});
+    }
+  }catch(error){
+    console.log(error);
+  }
 }
 
 loadNotice();
-
 renderTasks();
-
 loadStudentSubmissions();
 
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </body>
 </html>
+

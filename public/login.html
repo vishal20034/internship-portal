@@ -7,6 +7,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
 
 *{
@@ -217,23 +219,44 @@ password
 
 const data = await response.json();
 
+console.log(data.student);
+
 document.getElementById("loadingText").style.display="none";
 
 if(data.success){
 
 localStorage.setItem("student", JSON.stringify({
-name:data.student.name,
+name:
+data.student.name ||
+data.student.fullName ||
+data.student.username ||
+data.student.employeeId,
+
 employeeId:data.student.employeeId,
 domain:data.student.domain
 }));
 
-alert("Login Successful 🚀");
+Swal.fire({
+icon: "success",
+title: "Login Successful",
+text: "Welcome to Internship Portal 🚀",
+background: "#101820",
+color: "#ffffff",
+confirmButtonColor: "#00bfff"
+});
 
 window.location.href="student-dashboard.html";
 
 }else{
 
-alert(data.message || "Invalid Login");
+Swal.fire({
+icon: "error",
+title: "Login Failed",
+text: data.message || "Invalid Login",
+background: "#101820",
+color: "#ffffff",
+confirmButtonColor: "#ff1744"
+});
 
 }
 
@@ -243,7 +266,14 @@ document.getElementById("loadingText").style.display="none";
 
 console.log(error);
 
-alert("Server Error");
+Swal.fire({
+icon: "error",
+title: "Server Error",
+text: "Something went wrong",
+background: "#101820",
+color: "#ffffff",
+confirmButtonColor: "#ff1744"
+});
 
 }
 
